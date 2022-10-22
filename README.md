@@ -34,6 +34,6 @@ server: {
     },
   },
 ### `in nestify/src/main.ts` change:
-const app = await NestFactory.create(AppModule);
+`const app = await NestFactory.create(AppModule);`
 ### to
-const app = await NestFactory.create(AppModule, { cors: true });
+`const app = await NestFactory.create(AppModule, { cors: true });`
