@@ -24,7 +24,7 @@ You can change these settings for your backend & frontend, if you wish.
 
 7. check proxy and CORS settings for the backend & the frontend:
 ### `in nestify-frontend/vite.config.ts` add:
-<!-- server: {
+server: {
     proxy: {
       "/api": {
         target: "http:your-backend-localhost-URL",
@@ -32,8 +32,8 @@ You can change these settings for your backend & frontend, if you wish.
         rewrite: (path) => path.replace(/^\/api/, ""),
       },
     },
-  }, -->
+  },
 ### `in nestify/src/main.ts` change:
-<!-- const app = await NestFactory.create(AppModule); -->
+const app = await NestFactory.create(AppModule);
 ### to
-<!-- const app = await NestFactory.create(AppModule, { cors: true }); -->
+const app = await NestFactory.create(AppModule, { cors: true });
