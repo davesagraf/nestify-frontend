@@ -4,13 +4,11 @@ import { Routes, Route } from 'react-router-dom';
 import { PublicPage } from '../auth/PublicPage';
 import { ProtectedPage } from '../auth/ProtectedPage';
 import { Layout } from '../Layout';
-import { AuthProvider } from '../auth/AuthProvider';
-import { RequireAuth } from '../auth/RequireAuth';
+import { Auth } from '../auth/Auth';
 import { LoginPage } from '../auth/LoginPage';
 
 export const App: React.FC = () => {
   return (
-    <AuthProvider>
       <Routes>
         <Route element={<Layout />}>
           <Route path="/" element={<PublicPage />} />
@@ -18,13 +16,12 @@ export const App: React.FC = () => {
           <Route
             path="/profile"
             element={
-              <RequireAuth>
+              <Auth>
                 <ProtectedPage />
-              </RequireAuth>
+              </Auth>
             }
           />
         </Route>
       </Routes>
-    </AuthProvider>
   );
 }

@@ -1,14 +1,18 @@
 import { useNavigate } from 'react-router-dom';
-import { useAuth } from './AuthProvider';
+import { useContext } from 'react';
+import { StoreContext } from '../../StoreContext';
+import { observer } from 'mobx-react-lite';
 import { Box, Button, Typography } from '@mui/material';
 
-export const AuthStatus: React.FC = () => {
-  let auth = useAuth();
+export const AuthStatus: React.FC = observer(() => {
+  const { authStore } = useContext(StoreContext);
+  const authenticated = authStore.isAuthenticated();
   let navigate = useNavigate();
+  let user = 'user';
 
   return (
     <>
-      {!auth.user ? (
+      {!authenticated ? (
         <Box component={"div"} sx={{ width: 400, height: 300 }}>
           <Typography
             sx={{
@@ -28,12 +32,13 @@ export const AuthStatus: React.FC = () => {
                 height: 30,
               }}
             >
-              Welcome back, {auth.user}!{" "}
+              Welcome back, {user}!{" "}
             </Typography>
             <Button
               variant="outlined"
               onClick={() => {
-                auth.signout(() => navigate("/"));
+                authStore.logOut(); 
+                navigate("/");
               }}
             >
               Sign Out
@@ -43,4 +48,4 @@ export const AuthStatus: React.FC = () => {
       )}
     </>
   );
-};
+});
