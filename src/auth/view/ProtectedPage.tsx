@@ -1,6 +1,7 @@
 import { Typography } from '@mui/material';
+import { observer } from 'mobx-react-lite';
 
-export const ProtectedPage: React.FC = () => {
+export const ProtectedPage: React.FC = observer(() => {
   return (
     <Typography
       sx={{
@@ -12,4 +13,4 @@ export const ProtectedPage: React.FC = () => {
       lecture 6, lecture 7
     </Typography>
   );
-};
+});
