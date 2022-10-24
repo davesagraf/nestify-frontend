@@ -1,15 +1,15 @@
 import { useNavigate } from 'react-router-dom';
-import { useState } from 'react';
 import { observer } from 'mobx-react-lite';
 import { Box, Button, Typography } from '@mui/material';
 import { IAuthDomainStore } from '../domain/IAuthDomainStore';
-import { AuthDomainStore } from '../domain/AuthDomainStore';
 
-export const AuthStatus: React.FC = observer(() => {
-  const [authDomain] = useState<IAuthDomainStore>(new AuthDomainStore());
+interface IStatusProperty {
+  authDomain: IAuthDomainStore;
+}
+
+export const AuthStatus = observer(({authDomain}: IStatusProperty) => {
   let navigate = useNavigate();
   let user = 'user';
-
   return (
     <>
       {!authDomain.authStore.authenticated ? (

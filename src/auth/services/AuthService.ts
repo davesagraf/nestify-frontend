@@ -32,10 +32,9 @@ export class AuthService {
 
     const parsedResponse = await response.json();
 
-    if (response.status === 400) {
-      throw new Error('a User with this Email already exists!');
+    if (!response.ok) {
+      throw parsedResponse;
     }
-
     return parsedResponse;
   }
 }

@@ -3,14 +3,13 @@ import { useNavigate, useLocation } from "react-router-dom";
 import { Box, Button, Dialog, TextField, Typography } from "@mui/material";
 import { observer } from "mobx-react-lite";
 import { LoginRequestDTO } from "../services/dto/request/LoginRequestDTO";
-import { IAuthDomainStore } from "../domain/IAuthDomainStore";
-import { AuthDomainStore } from "../domain/AuthDomainStore";
 
-export const LoginPage: React.FC = observer(() => {
-  const [authDomain] = useState<IAuthDomainStore>(new AuthDomainStore());
-  const authenticated = authDomain.authStore.authenticated;
+export const LoginPage = observer(({ authDomain }: any) => {
   const [errorMessage, setErrorMessage] = useState<string>("");
-  const [userData, setUserData] = useState<LoginRequestDTO>({email: "", password: ""});
+  const [userData, setUserData] = useState<LoginRequestDTO>({
+    email: "",
+    password: "",
+  });
   let navigate = useNavigate();
   let location = useLocation();
 
@@ -26,12 +25,12 @@ export const LoginPage: React.FC = observer(() => {
 
   return (
     <>
-      {!authenticated ? (
+      {!authDomain.authStore.authenticated ? (
         <>
           <Typography>
             Please, log in to view your profile page at nestify{from}
           </Typography>
-          <Dialog open={!authenticated}>
+          <Dialog open={!authDomain.authStore.authenticated}>
             <Box component="div" sx={{ height: 300, width: 400, mt: 1 }}>
               <TextField
                 id="email"
@@ -55,19 +54,21 @@ export const LoginPage: React.FC = observer(() => {
               />
               <Button
                 onClick={() => {
-                  authDomain.login(userData, setErrorMessage);
+                  authDomain.login(userData, setErrorMessage).then(() => {
+                    if (authDomain.authStore.authenticated === true) {
+                      navigate(from, { replace: true });
+                    }
+                  });
                 }}>
                 Login
               </Button>
             </Box>
+            <Typography component="p" variant="inherit" color="red">
+              {errorMessage}
+            </Typography>
           </Dialog>
-          <Typography component="p" variant="inherit" color="red">
-            {errorMessage}
-          </Typography>
         </>
-      ) : (
-        navigate(from, { replace: true })
-      )}
+      ) : null}
     </>
   );
 });

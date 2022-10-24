@@ -1,4 +1,3 @@
-import { runInAction } from "mobx";
 import { AuthService } from "../services/AuthService";
 import { LoginRequestDTO } from "../services/dto/request/LoginRequestDTO";
 import { SignUpRequestDTO } from "../services/dto/request/SignUpRequestDTO";
@@ -16,20 +15,21 @@ export class AuthDomainStore implements IAuthDomainStore {
   async login(loginRequest: LoginRequestDTO, setErrorMessage: any) {
     try {
       const tokenPayloadDto: any = await this.authService.login(loginRequest);
-      console.log(tokenPayloadDto);
       localStorage.setItem("access_token", tokenPayloadDto.access_token);
       
-      // runInAction(() => {
-      //   this.setAuthenticated(true);
-      // })
-      return this.authStore.authenticated = true;
+      this.setAuthenticated(true);
     } catch (err: any) {
       setErrorMessage(err.error);
     }
   }
 
-  async signup(signUpRequest: SignUpRequestDTO) {
-    await this.authService.signup(signUpRequest);
+  async signup(signUpRequest: SignUpRequestDTO, setErrorMessage: any, setErrorStatus: any) {
+    try {
+      await this.authService.signup(signUpRequest);
+    } catch (err: any) {
+      setErrorMessage(err.error);
+      setErrorStatus(err.status);
+    }
   }
 
   private setAuthenticated(authenticated: boolean) {

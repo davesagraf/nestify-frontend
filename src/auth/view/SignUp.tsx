@@ -13,7 +13,7 @@ import { SignUpRequestDTO } from "../services/dto/request/SignUpRequestDTO";
 import { IAuthDomainStore } from "../domain/IAuthDomainStore";
 import { AuthDomainStore } from "../domain/AuthDomainStore";
 
-export const SignUp: React.FC = observer(() => {
+export const SignUp = observer(() => {
   const [authDomain] = useState<IAuthDomainStore>(new AuthDomainStore());
   const authenticated = authDomain.authStore.authenticated;
   const [userData, setUserData] = useState<SignUpRequestDTO>({
@@ -22,6 +22,8 @@ export const SignUp: React.FC = observer(() => {
     email: "",
     password: ""
   });
+  const [errorMessage, setErrorMessage] = useState<string>("");
+  const [errorStatus, setErrorStatus] = useState<number>(0);
 
   let navigate = useNavigate();
 
@@ -90,15 +92,18 @@ export const SignUp: React.FC = observer(() => {
               <Button
                 sx={{ width: 60, height: 30 }}
                 onClick={() => {
-                  authDomain.authService.signup(userData)
-                  .then(() => navigate("/login"))
-                  .catch((error) =>
-                  alert(error.message)
-                  )
+                  authDomain.signup(userData, setErrorMessage, setErrorStatus).then(() => {
+                    if(errorStatus !== 400) {
+                      navigate('/login');
+                    }
+                  })
                 }}>
                 SIGN UP
               </Button>
             </Box>
+            <Typography component="p" variant="inherit" color="red">
+            {errorMessage}
+          </Typography>
           </Dialog>
           <Grid container sx={{ width: 400, height: 300 }}>
             <Grid item sx={{ width: 400, height: 50 }}>
