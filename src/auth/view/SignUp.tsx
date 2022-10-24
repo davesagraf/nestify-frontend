@@ -9,32 +9,36 @@ import {
   Typography,
 } from "@mui/material";
 import { observer } from "mobx-react-lite";
+import { SignUpRequestDTO } from "../services/dto/request/SignUpRequestDTO";
+import { IAuthDomainStore } from "../domain/IAuthDomainStore";
 import { AuthDomainStore } from "../domain/AuthDomainStore";
 
 export const SignUp: React.FC = observer(() => {
-  const [authDomain] = useState(new AuthDomainStore());
+  const [authDomain] = useState<IAuthDomainStore>(new AuthDomainStore());
   const authenticated = authDomain.authStore.authenticated;
-  const [firstName, setFirstName] = useState("");
-  const [lastName, setLastName] = useState("");
-  const [email, setEmail] = useState("");
-  const [password, setPassword] = useState("");
+  const [userData, setUserData] = useState<SignUpRequestDTO>({
+    firstName: "",
+    lastName: "",
+    email: "",
+    password: ""
+  });
 
   let navigate = useNavigate();
 
   const handleFirstName = (event: React.ChangeEvent<HTMLInputElement>) => {
-    setFirstName(event.currentTarget.value);
+    setUserData({ ...userData, firstName: event.currentTarget.value });
   };
 
   const handleLastName = (event: React.ChangeEvent<HTMLInputElement>) => {
-    setLastName(event.currentTarget.value);
+    setUserData({ ...userData, lastName: event.currentTarget.value });
   };
 
   const handleEmail = (event: React.ChangeEvent<HTMLInputElement>) => {
-    setEmail(event.currentTarget.value);
+    setUserData({ ...userData, email: event.currentTarget.value });
   };
 
   const handlePassword = (event: React.ChangeEvent<HTMLInputElement>) => {
-    setPassword(event.currentTarget.value);
+    setUserData({ ...userData, password: event.currentTarget.value });
   };
 
   return (
@@ -48,7 +52,7 @@ export const SignUp: React.FC = observer(() => {
                 name="firstname"
                 label="First Name"
                 type="text"
-                value={firstName}
+                value={userData.firstName}
                 variant="outlined"
                 placeholder="enter your last name"
                 onChange={handleFirstName}
@@ -58,7 +62,7 @@ export const SignUp: React.FC = observer(() => {
                 name="lastname"
                 label="Last Name"
                 type="text"
-                value={lastName}
+                value={userData.lastName}
                 variant="outlined"
                 placeholder="enter your last name"
                 onChange={handleLastName}
@@ -68,7 +72,7 @@ export const SignUp: React.FC = observer(() => {
                 name="email"
                 label="email"
                 type="email"
-                value={email}
+                value={userData.email}
                 variant="outlined"
                 placeholder="enter your email"
                 onChange={handleEmail}
@@ -78,7 +82,7 @@ export const SignUp: React.FC = observer(() => {
                 name="password"
                 label="password"
                 type="password"
-                value={password}
+                value={userData.password}
                 variant="outlined"
                 placeholder="enter your password"
                 onChange={handlePassword}
@@ -86,7 +90,7 @@ export const SignUp: React.FC = observer(() => {
               <Button
                 sx={{ width: 60, height: 30 }}
                 onClick={() => {
-                  authDomain.signup({ firstName, lastName, email, password })
+                  authDomain.authService.signup(userData)
                   .then(() => navigate("/login"))
                   .catch((error) =>
                   alert(error.message)

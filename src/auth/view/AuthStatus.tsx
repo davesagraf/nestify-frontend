@@ -1,19 +1,18 @@
 import { useNavigate } from 'react-router-dom';
-import { useContext, useState } from 'react';
+import { useState } from 'react';
 import { observer } from 'mobx-react-lite';
 import { Box, Button, Typography } from '@mui/material';
+import { IAuthDomainStore } from '../domain/IAuthDomainStore';
 import { AuthDomainStore } from '../domain/AuthDomainStore';
-import { StoreContext } from '../../StoreContext';
 
 export const AuthStatus: React.FC = observer(() => {
-  const { authDomainStore } = useContext(StoreContext);
-  const authenticated = authDomainStore.authStore.authenticated;
+  const [authDomain] = useState<IAuthDomainStore>(new AuthDomainStore());
   let navigate = useNavigate();
   let user = 'user';
 
   return (
     <>
-      {!authenticated ? (
+      {!authDomain.authStore.authenticated ? (
         <Box component={"div"} sx={{ width: 400, height: 300 }}>
           <Typography
             sx={{
@@ -38,7 +37,7 @@ export const AuthStatus: React.FC = observer(() => {
             <Button
               variant="outlined"
               onClick={() => {
-                authDomainStore.logOut(); 
+                authDomain.logOut(); 
                 navigate("/");
               }}
             >

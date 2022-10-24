@@ -9,22 +9,22 @@ import { IAuthDomainStore } from "./IAuthDomainStore";
 export class AuthDomainStore implements IAuthDomainStore {
   constructor(
     public authStore: IAuthStore = new AuthStore(),
-    private readonly authService: AuthService = new AuthService()  ) {
+    readonly authService: AuthService = new AuthService()  ) {
     this.authStore.authenticated = !!this.getAccessToken();
   }
 
-  async login(loginRequest: LoginRequestDTO) {
+  async login(loginRequest: LoginRequestDTO, setErrorMessage: any) {
     try {
-      const tokenPayloadDto = await this.authService.login(loginRequest);
+      const tokenPayloadDto: any = await this.authService.login(loginRequest);
+      console.log(tokenPayloadDto);
       localStorage.setItem("access_token", tokenPayloadDto.access_token);
       
-      runInAction(() => {
-        this.setAuthenticated(true);
-      })
-    } catch (err) {
-      runInAction(() => {
-        this.setAuthenticated(false);
-      })
+      // runInAction(() => {
+      //   this.setAuthenticated(true);
+      // })
+      return this.authStore.authenticated = true;
+    } catch (err: any) {
+      setErrorMessage(err.error);
     }
   }
 
@@ -33,9 +33,7 @@ export class AuthDomainStore implements IAuthDomainStore {
   }
 
   private setAuthenticated(authenticated: boolean) {
-    runInAction(() => {
-      this.authStore.authenticated = authenticated;
-    })
+    this.authStore.authenticated = authenticated;
   }
 
   getAccessToken() {
@@ -48,8 +46,6 @@ export class AuthDomainStore implements IAuthDomainStore {
   }
 
   isAuthenticated() {
-    return runInAction(() => {
-      this.authStore.authenticated;
-    })
+    this.authStore.authenticated;
   }
 }

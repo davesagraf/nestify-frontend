@@ -2,25 +2,26 @@ import React, { useState } from "react";
 import { useNavigate, useLocation } from "react-router-dom";
 import { Box, Button, Dialog, TextField, Typography } from "@mui/material";
 import { observer } from "mobx-react-lite";
+import { LoginRequestDTO } from "../services/dto/request/LoginRequestDTO";
+import { IAuthDomainStore } from "../domain/IAuthDomainStore";
 import { AuthDomainStore } from "../domain/AuthDomainStore";
 
 export const LoginPage: React.FC = observer(() => {
-  const [authDomain] = useState(new AuthDomainStore());
+  const [authDomain] = useState<IAuthDomainStore>(new AuthDomainStore());
   const authenticated = authDomain.authStore.authenticated;
-  const [errorMessage, setErrorMessage] = useState("");
-  const [email, setEmail] = useState("");
-  const [password, setPassword] = useState("");
+  const [errorMessage, setErrorMessage] = useState<string>("");
+  const [userData, setUserData] = useState<LoginRequestDTO>({email: "", password: ""});
   let navigate = useNavigate();
   let location = useLocation();
 
   let from = location.state?.from?.pathname || "/";
 
   const handleEmail = (event: React.ChangeEvent<HTMLInputElement>) => {
-    setEmail(event.currentTarget.value);
+    setUserData({ ...userData, email: event.currentTarget.value });
   };
 
   const handlePassword = (event: React.ChangeEvent<HTMLInputElement>) => {
-    setPassword(event.currentTarget.value);
+    setUserData({ ...userData, password: event.currentTarget.value });
   };
 
   return (
@@ -37,7 +38,7 @@ export const LoginPage: React.FC = observer(() => {
                 name="email"
                 label="email"
                 type="email"
-                value={email}
+                value={userData.email}
                 variant="outlined"
                 placeholder="enter your email"
                 onChange={handleEmail}
@@ -47,17 +48,14 @@ export const LoginPage: React.FC = observer(() => {
                 name="password"
                 label="password"
                 type="password"
-                value={password}
+                value={userData.password}
                 variant="outlined"
                 placeholder="enter your password"
                 onChange={handlePassword}
               />
               <Button
                 onClick={() => {
-                  authDomain
-                    .login({ email, password })
-                    .then(() => navigate(from, { replace: true }))
-                    .catch((error) => alert(error.message));
+                  authDomain.login(userData, setErrorMessage);
                 }}>
                 Login
               </Button>

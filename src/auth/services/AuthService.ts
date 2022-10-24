@@ -15,7 +15,7 @@ export class AuthService {
     const parsedResponse = await response.json();
 
     if (!response.ok) {
-      throw new Error(parsedResponse);
+      throw parsedResponse;
     }
 
     return parsedResponse;
