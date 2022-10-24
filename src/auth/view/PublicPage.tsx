@@ -1,11 +1,8 @@
-import React, { useState } from "react";
 import { Grid, Typography } from "@mui/material";
 import { observer } from "mobx-react-lite";
 import { Link } from "react-router-dom";
-import { AuthDomainStore } from "../domain/AuthDomainStore";
 
-export const PublicPage: React.FC = observer(() => {
-  const [authDomain] = useState(new AuthDomainStore());
+export const PublicPage = observer(({authDomain}: any) => {
   const authenticated = authDomain.authStore.authenticated;
   return (
     <>

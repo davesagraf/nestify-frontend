@@ -16,7 +16,7 @@ export const App= observer(() => {
   return (
       <Routes>
         <Route element={<Layout authDomain={authDomain}/>}>
-          <Route path="/" element={<PublicPage />} />
+          <Route path="/" element={<PublicPage authDomain={authDomain} />} />
           <Route path="/login" element={<LoginPage authDomain={authDomain}/>} />
           <Route path="/signup" element={<SignUp />} />
           <Route
