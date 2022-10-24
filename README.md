@@ -23,7 +23,7 @@ You can change these settings for your backend & frontend, if you wish.
 ### `npm run start:dev`
 
 7. check proxy and CORS settings for the backend & the frontend:
-### `in nestify-frontend/vite.config.ts` add:
+### in `nestify-frontend/vite.config.ts` add:
 server: {
     proxy: {
       "/api": {
@@ -33,7 +33,7 @@ server: {
       },
     },
   },
-### `in nestify/src/main.ts` change:
+### in`nestify/src/main.ts` change:
 `const app = await NestFactory.create(AppModule);`
 ### to
 `const app = await NestFactory.create(AppModule, { cors: true });`

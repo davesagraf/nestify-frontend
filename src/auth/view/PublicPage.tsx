@@ -2,7 +2,7 @@ import { Grid, Typography } from "@mui/material";
 import { observer } from "mobx-react-lite";
 import { Link } from "react-router-dom";
 
-export const PublicPage = observer(({authDomain}: any) => {
+export const PublicPage = observer(({ authDomain }: any) => {
   const authenticated = authDomain.authStore.authenticated;
   return (
     <>

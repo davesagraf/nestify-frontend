@@ -26,7 +26,9 @@ export class AuthDomainStore implements IAuthDomainStore {
   async signup(signUpRequest: SignUpRequestDTO, setErrorMessage: any, setErrorStatus: any) {
     try {
       await this.authService.signup(signUpRequest);
+      this.setUserExists(false);
     } catch (err: any) {
+      this.setUserExists(true);
       setErrorMessage(err.error);
       setErrorStatus(err.status);
     }
@@ -34,6 +36,10 @@ export class AuthDomainStore implements IAuthDomainStore {
 
   private setAuthenticated(authenticated: boolean) {
     this.authStore.authenticated = authenticated;
+  }
+
+  private setUserExists(userExists: boolean) {
+    this.authStore.userExists = userExists;
   }
 
   getAccessToken() {
@@ -47,5 +53,9 @@ export class AuthDomainStore implements IAuthDomainStore {
 
   isAuthenticated() {
     this.authStore.authenticated;
+  }
+
+  userExists(){
+    this.authStore.userExists;
   }
 }

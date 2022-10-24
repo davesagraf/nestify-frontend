@@ -1,5 +1,5 @@
 import './App.css';
-import React, { useState } from 'react';
+import { useState } from 'react';
 import { Routes, Route } from 'react-router-dom';
 import { PublicPage } from '../../auth/view/PublicPage';
 import { ProtectedPage } from '../../auth/view/ProtectedPage';
@@ -18,7 +18,7 @@ export const App= observer(() => {
         <Route element={<Layout authDomain={authDomain}/>}>
           <Route path="/" element={<PublicPage authDomain={authDomain} />} />
           <Route path="/login" element={<LoginPage authDomain={authDomain}/>} />
-          <Route path="/signup" element={<SignUp />} />
+          <Route path="/signup" element={<SignUp authDomain={authDomain} />} />
           <Route
             path="/profile"
             element={

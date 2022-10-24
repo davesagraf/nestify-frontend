@@ -6,10 +6,9 @@ import { IAuthDomainStore } from '../domain/IAuthDomainStore';
 
 export const Auth = observer(({ children }: { children: JSX.Element }) => {
   const [authDomain] = useState<IAuthDomainStore>(new AuthDomainStore());
-  const authenticated = authDomain.authStore.authenticated;
   let location = useLocation();
 
-  if (!authenticated) {
+  if (!authDomain.authStore.authenticated) {
     return <Navigate to="/login" state={{ from: location }} replace />;
   }
 
