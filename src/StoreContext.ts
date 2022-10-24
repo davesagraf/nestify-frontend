@@ -1,14 +1,14 @@
 import React from "react";
-import { AuthService } from "./services/AuthService";
-import { AuthStore } from "./stores/AuthStore";
+import { AuthDomainStore } from "./auth/domain/AuthDomainStore";
+import { AuthService } from "./auth/services/AuthService";
 
 interface IStoreContext {
-  authStore: AuthStore;
+  authDomainStore: AuthDomainStore
 }
 
 const authService = new AuthService();
-const authStore = new AuthStore(authService);
+const authDomainStore = new AuthDomainStore();
 
 export const StoreContext = React.createContext<IStoreContext>({
-  authStore,
+  authDomainStore
 });

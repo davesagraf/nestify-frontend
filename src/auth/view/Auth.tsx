@@ -1,11 +1,11 @@
 import { useLocation, Navigate } from 'react-router-dom';
-import { useContext } from 'react';
-import { StoreContext } from '../../StoreContext';
+import { useState } from 'react';
 import { observer } from 'mobx-react-lite';
+import { AuthDomainStore } from '../domain/AuthDomainStore';
 
 export const Auth = observer(({ children }: { children: JSX.Element }) => {
-  const { authStore } = useContext(StoreContext);
-  const authenticated = authStore.isAuthenticated();
+  const [authDomain] = useState(new AuthDomainStore());
+  const authenticated = authDomain.authStore.authenticated;
   let location = useLocation();
 
   if (!authenticated) {

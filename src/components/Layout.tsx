@@ -1,8 +1,9 @@
 import { Grid } from '@mui/material';
+import { observer } from 'mobx-react-lite';
 import { Link, Outlet } from 'react-router-dom';
-import { AuthStatus } from './auth/AuthStatus';
+import { AuthStatus } from '../auth/view/AuthStatus';
 
-export const Layout: React.FC = () => {
+export const Layout: React.FC = observer(() => {
   return (
     <>
       <Grid container sx={{ width: 400, height: 500 }}>
@@ -19,4 +20,4 @@ export const Layout: React.FC = () => {
       <Outlet />
     </>
   );
-};
+});

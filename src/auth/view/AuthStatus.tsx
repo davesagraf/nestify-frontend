@@ -1,12 +1,13 @@
 import { useNavigate } from 'react-router-dom';
-import { useContext } from 'react';
-import { StoreContext } from '../../StoreContext';
+import { useContext, useState } from 'react';
 import { observer } from 'mobx-react-lite';
 import { Box, Button, Typography } from '@mui/material';
+import { AuthDomainStore } from '../domain/AuthDomainStore';
+import { StoreContext } from '../../StoreContext';
 
 export const AuthStatus: React.FC = observer(() => {
-  const { authStore } = useContext(StoreContext);
-  const authenticated = authStore.isAuthenticated();
+  const { authDomainStore } = useContext(StoreContext);
+  const authenticated = authDomainStore.authStore.authenticated;
   let navigate = useNavigate();
   let user = 'user';
 
@@ -37,7 +38,7 @@ export const AuthStatus: React.FC = observer(() => {
             <Button
               variant="outlined"
               onClick={() => {
-                authStore.logOut(); 
+                authDomainStore.logOut(); 
                 navigate("/");
               }}
             >

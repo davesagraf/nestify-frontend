@@ -1,12 +1,12 @@
-import React, { useContext, useState } from "react";
+import React, { useState } from "react";
 import { useNavigate, useLocation } from "react-router-dom";
 import { Box, Button, Dialog, TextField, Typography } from "@mui/material";
 import { observer } from "mobx-react-lite";
-import { StoreContext } from "../../StoreContext";
+import { AuthDomainStore } from "../domain/AuthDomainStore";
 
 export const LoginPage: React.FC = observer(() => {
-  const { authStore } = useContext(StoreContext);
-  const authenticated = authStore.isAuthenticated();
+  const [authDomain] = useState(new AuthDomainStore());
+  const authenticated = authDomain.authStore.authenticated;
   const [errorMessage, setErrorMessage] = useState("");
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
@@ -54,7 +54,10 @@ export const LoginPage: React.FC = observer(() => {
               />
               <Button
                 onClick={() => {
-                  authStore.login({ email, password });
+                  authDomain
+                    .login({ email, password })
+                    .then(() => navigate(from, { replace: true }))
+                    .catch((error) => alert(error.message));
                 }}>
                 Login
               </Button>
@@ -64,7 +67,9 @@ export const LoginPage: React.FC = observer(() => {
             {errorMessage}
           </Typography>
         </>
-      ) : navigate(from, { replace: true })}
+      ) : (
+        navigate(from, { replace: true })
+      )}
     </>
   );
 });
