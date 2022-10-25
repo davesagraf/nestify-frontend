@@ -17,7 +17,6 @@ export class AuthService {
     if (!response.ok) {
       throw parsedResponse;
     }
-
     return parsedResponse;
   }
 

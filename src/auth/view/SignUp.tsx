@@ -10,22 +10,18 @@ import {
 } from "@mui/material";
 import { observer } from "mobx-react-lite";
 import { SignUpRequestDTO } from "../services/dto/request/SignUpRequestDTO";
-import { IAuthDomainStore } from "../domain/IAuthDomainStore";
-import { AuthDomainStore } from "../domain/AuthDomainStore";
 
-export const SignUp = observer(() => {
-  const [authDomain] = useState<IAuthDomainStore>(new AuthDomainStore());
-  const authenticated = authDomain.authStore.authenticated;
+export const SignUp = observer(({ authDomain }: any) => {
   const [userData, setUserData] = useState<SignUpRequestDTO>({
     firstName: "",
     lastName: "",
     email: "",
-    password: ""
+    password: "",
   });
   const [errorMessage, setErrorMessage] = useState<string>("");
-  const [errorStatus, setErrorStatus] = useState<number>(0);
+  const [errorStatus, setErrorStatus] = useState<null>(null);
 
-  let navigate = useNavigate();
+  const navigate = useNavigate();
 
   const handleFirstName = (event: React.ChangeEvent<HTMLInputElement>) => {
     setUserData({ ...userData, firstName: event.currentTarget.value });
@@ -45,9 +41,9 @@ export const SignUp = observer(() => {
 
   return (
     <>
-      {!authenticated ? (
+      {!authDomain.authStore.authenticated ? (
         <>
-          <Dialog open={!authenticated}>
+          <Dialog open={!authDomain.authStore.authenticated}>
             <Box component="div" sx={{ height: 300, width: 400, mt: 1 }}>
               <TextField
                 id="firstname"
@@ -92,18 +88,20 @@ export const SignUp = observer(() => {
               <Button
                 sx={{ width: 60, height: 30 }}
                 onClick={() => {
-                  authDomain.signup(userData, setErrorMessage, setErrorStatus).then(() => {
-                    if(errorStatus !== 400) {
-                      navigate('/login');
-                    }
-                  })
+                  authDomain
+                    .signup(userData, setErrorMessage, setErrorStatus)
+                    .then(() => {
+                      if (!authDomain.authStore.userExists) {
+                        navigate("/login");
+                      }
+                    });
                 }}>
                 SIGN UP
               </Button>
             </Box>
-            <Typography component="p" variant="inherit" color="red">
-            {errorMessage}
-          </Typography>
+            {errorStatus === 400 ? <Typography component="p" variant="inherit" color="red">
+              {`oops...it's ${errorStatus}, baby, looks like ${errorMessage}`}
+            </Typography> : null}
           </Dialog>
           <Grid container sx={{ width: 400, height: 300 }}>
             <Grid item sx={{ width: 400, height: 50 }}>

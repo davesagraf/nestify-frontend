@@ -1,15 +1,10 @@
-import { useNavigate } from 'react-router-dom';
-import { observer } from 'mobx-react-lite';
-import { Box, Button, Typography } from '@mui/material';
-import { IAuthDomainStore } from '../domain/IAuthDomainStore';
+import { useNavigate } from "react-router-dom";
+import { observer } from "mobx-react-lite";
+import { Box, Button, Typography } from "@mui/material";
 
-interface IStatusProperty {
-  authDomain: IAuthDomainStore;
-}
-
-export const AuthStatus = observer(({authDomain}: IStatusProperty) => {
+export const AuthStatus = observer(({ authDomain }: any) => {
   let navigate = useNavigate();
-  let user = 'user';
+  let user = "user";
   return (
     <>
       {!authDomain.authStore.authenticated ? (
@@ -18,8 +13,7 @@ export const AuthStatus = observer(({authDomain}: IStatusProperty) => {
             sx={{
               width: 400,
               height: 30,
-            }}
-          >
+            }}>
             You are not logged in.
           </Typography>
         </Box>
@@ -30,17 +24,15 @@ export const AuthStatus = observer(({authDomain}: IStatusProperty) => {
               sx={{
                 width: 400,
                 height: 30,
-              }}
-            >
+              }}>
               Welcome back, {user}!{" "}
             </Typography>
             <Button
               variant="outlined"
               onClick={() => {
-                authDomain.logOut(); 
+                authDomain.logOut();
                 navigate("/");
-              }}
-            >
+              }}>
               Sign Out
             </Button>
           </Box>
