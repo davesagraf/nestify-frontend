@@ -1,14 +1,17 @@
 import React from "react";
+import { UserDomainStore } from "./user/domain/UserDomainStore";
 import { AuthDomainStore } from "./auth/domain/AuthDomainStore";
-import { AuthService } from "./auth/services/AuthService";
+import { makeAutoObservable } from "mobx";
 
-interface IStoreContext {
-  authDomainStore: AuthDomainStore
+class RootStore {
+  public userDomain = new UserDomainStore();
+  public authDomain = new AuthDomainStore();
+
+  constructor() {
+    makeAutoObservable(this);
+  }
 }
 
-const authService = new AuthService();
-const authDomainStore = new AuthDomainStore();
+const StoresContext = React.createContext(new RootStore());
 
-export const StoreContext = React.createContext<IStoreContext>({
-  authDomainStore
-});
+export const useStores = () => React.useContext(StoresContext);
