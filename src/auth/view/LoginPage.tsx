@@ -1,8 +1,9 @@
 import React, { useState } from "react";
 import { useNavigate, useLocation } from "react-router-dom";
-import { Box, Button, Dialog, TextField, Typography } from "@mui/material";
+import { Button, Dialog, Grid, TextField, Typography } from "@mui/material";
 import { observer } from "mobx-react-lite";
 import { LoginRequestDTO } from "../services/dto/request/LoginRequestDTO";
+import ArrowBackIcon from "@mui/icons-material/ArrowBack";
 
 export const LoginPage = observer(({ authDomain }: any) => {
   const [errorMessage, setErrorMessage] = useState<string>("");
@@ -10,8 +11,9 @@ export const LoginPage = observer(({ authDomain }: any) => {
     email: "",
     password: "",
   });
-  let navigate = useNavigate();
-  let location = useLocation();
+
+  const navigate = useNavigate();
+  const location = useLocation();
 
   let from = location.state?.from?.pathname || "/";
 
@@ -25,50 +27,99 @@ export const LoginPage = observer(({ authDomain }: any) => {
 
   return (
     <>
+      <Button
+        sx={{
+          transform: "translate(75px, -45px)",
+          width: 100,
+          height: 100,
+          display: "flex",
+          flexDirection: "column",
+          position: "relative",
+          zIndex: "1301",
+          cursor: "pointer",
+        }}
+        startIcon={<ArrowBackIcon />}
+        onClick={() => navigate(-1)}>
+        BACK
+      </Button>
       {!authDomain.authStore.authenticated ? (
         <>
-          <Typography>
-            Please, log in to view your profile page at nestify{from}
-          </Typography>
-          <Dialog open={!authDomain.authStore.authenticated}>
-            <Box component="div" sx={{ height: 300, width: 400, mt: 1 }}>
-              <TextField
-                id="email"
-                name="email"
-                label="email"
-                type="email"
-                value={userData.email}
-                variant="outlined"
-                placeholder="enter your email"
-                onChange={handleEmail}
-              />
-              <TextField
-                id="password"
-                name="password"
-                label="password"
-                type="password"
-                value={userData.password}
-                variant="outlined"
-                placeholder="enter your password"
-                onChange={handlePassword}
-              />
-              <Button
-                onClick={() => {
-                  authDomain.login(userData, setErrorMessage).then(() => {
-                    if (authDomain.authStore.authenticated === true) {
-                      navigate(from, { replace: true });
-                    }
-                  });
-                }}>
-                Login
-              </Button>
-            </Box>
-            <Typography component="p" variant="inherit" color="red">
-              {errorMessage}
+          <Grid
+            container
+            sx={{
+              width: 1512,
+              height: 450,
+            }}>
+            <Dialog
+              sx={{
+                left: "556px",
+                width: 400,
+                height: 700,
+                textAlign: "center",
+              }}
+              open={!authDomain.authStore.authenticated}>
+              <Grid item sx={{ width: 304, height: 50, m: 2 }}>
+                <TextField
+                  id="email"
+                  name="email"
+                  label="Email"
+                  type="email"
+                  value={userData.email}
+                  variant="outlined"
+                  placeholder="enter your email"
+                  onChange={handleEmail}
+                  sx={{ width: 304, height: "50px" }}
+                  InputProps={{ style: { width: 300, height: 50 } }}
+                />
+              </Grid>
+              <Grid item sx={{ width: 304, height: 50, m: 2 }}>
+                <TextField
+                  id="password"
+                  name="password"
+                  label="Password"
+                  type="password"
+                  value={userData.password}
+                  variant="outlined"
+                  placeholder="enter your password"
+                  onChange={handlePassword}
+                  sx={{ width: 304, height: "50px" }}
+                  InputProps={{ style: { width: 300, height: 50 } }}
+                />
+              </Grid>
+              <Grid sx={{ width: 304, height: 50, m: 2 }}>
+                <Button
+                  variant="outlined"
+                  sx={{ width: 100, height: 50 }}
+                  onClick={() => {
+                    authDomain.login(userData, setErrorMessage).then(() => {
+                      if (authDomain.authStore.authenticated === true) {
+                        navigate(from, { replace: true });
+                      }
+                    });
+                  }}>
+                  Login
+                </Button>
+              </Grid>
+              <Grid item sx={{ width: 304, height: 50, m: 2 }}>
+                <Typography
+                  sx={{ width: 300, height: 30 }}
+                  component="p"
+                  variant="inherit"
+                  color="red">
+                  {errorMessage}
+                </Typography>
+              </Grid>
+            </Dialog>
+          </Grid>
+          <Grid item sx={{ width: 1512, height: 50 }}>
+            <Typography sx={{ width: 1512, height: 30 }}>
+              Please, log in to view your profile page.
             </Typography>
-          </Dialog>
+          </Grid>
         </>
-      ) : null}
+      ) : (
+        navigate("/profile")
+      )}
     </>
   );
 });

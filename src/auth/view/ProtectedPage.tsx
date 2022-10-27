@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
 import { useLocation, useNavigate } from "react-router-dom";
-import { Button, Grid, Typography } from "@mui/material";
+import { Button, Dialog, Grid, Typography } from "@mui/material";
 import { observer } from "mobx-react-lite";
 import { useStores } from "../../StoreContext";
 import { toJS } from "mobx";
@@ -13,15 +13,15 @@ export const ProtectedPage = observer(() => {
   const navigate = useNavigate();
   const [errorMessage, setErrorMessage] = useState<string>("");
 
-  const [counter, setCounter] = useState(10);
+  const [counter, setCounter] = useState(30);
   const [isTimeout, setIsTimeout] = useState(false);
 
   useEffect(() => {
     const timer = new IdleTimer({
-      timeout: 10,
+      timeout: 30,
       onTimeout: () => {
         setIsTimeout(true);
-        setCounter(10);
+        setCounter(30);
       },
       onExpired: () => {
         setIsTimeout(false);
@@ -30,7 +30,7 @@ export const ProtectedPage = observer(() => {
 
     counter > 0 && setTimeout(() => setCounter(counter - 1), 1000);
 
-    if (isTimeout === true && counter === 0) {
+    if (isTimeout && counter === 0) {
       localStorage.removeItem("_expiredTime");
       authDomain.logOut();
       navigate("/");
@@ -49,23 +49,39 @@ export const ProtectedPage = observer(() => {
 
   return (
     <>
-      {isTimeout ? (
-        <>
-          <Typography>
+      <Dialog
+        PaperProps={{
+          style: {
+            width: 400,
+            height: 150,
+          },
+        }}
+        sx={{
+          top: 10,
+          left: 50,
+          textAlign: "center",
+        }}
+        open={isTimeout}>
+        <Grid item sx={{ width: 304, height: 50, m: 2, textAlign: "center" }}>
+          <Typography sx={{ width: 300, height: 30, ml: 4 }}>
             after {counter} seconds you will be logged out
           </Typography>
+        </Grid>
+        <Grid item sx={{ width: 304, height: 50, m: 2, textAlign: "center" }}>
           <Button
-            sx={{ width: 100, height: 30 }}
+            variant="outlined"
+            sx={{ width: 150, height: 50, ml: 8 }}
             onClick={() => setIsTimeout(false)}>
             Keep me logged in
           </Button>
-        </>
-      ) : null}
-      <Grid container sx={{ width: 700, height: 1080 }}>
+        </Grid>
+      </Dialog>
+
+      <Grid container sx={{ width: 1512, height: 982 }}>
         <>
           <Typography
             sx={{
-              width: 400,
+              width: 1512,
               height: 30,
               color: "white",
               fontSize: 16,
@@ -74,35 +90,35 @@ export const ProtectedPage = observer(() => {
           </Typography>
           <Typography
             sx={{
-              width: 400,
+              width: 1512,
               height: 30,
               color: "white",
               fontSize: 16,
             }}>
             Last name: {user.lastName}
           </Typography>
-          <Grid container sx={{ width: 400, height: 900 }}>
+          <Grid container sx={{ width: 1512, height: 900 }}>
             {user.lectures.map((lecture, index) => (
               <>
-                <Grid container key={index} sx={{ width: 400, height: 450 }}>
-                  <Typography sx={{ width: 400, height: 30, color: "white" }}>
+                <Grid container key={index} sx={{ width: 1512, height: 450 }}>
+                  <Typography sx={{ width: 1512, height: 30, color: "white" }}>
                     {lecture.title}
                   </Typography>
-                  <Typography sx={{ width: 400, height: 30, color: "white" }}>
+                  <Typography sx={{ width: 1512, height: 30, color: "white" }}>
                     {lecture.content}
                   </Typography>
-                  <Grid container sx={{ width: 400, height: 100 }}>
-                    <Grid item sx={{ width: 400, height: 30 }}>
+                  <Grid container sx={{ width: 1512, height: 100 }}>
+                    <Grid item sx={{ width: 1512, height: 30 }}>
                       {lecture.data.image}
                     </Grid>
                     {lecture.data.links.map((link, idx) => (
                       <>
-                        <Grid key={idx} item sx={{ width: 400, height: 25 }}>
+                        <Grid key={idx} item sx={{ width: 1512, height: 25 }}>
                           {link}
                         </Grid>
                       </>
                     ))}
-                    <Grid item sx={{ width: 400, height: 30 }}>
+                    <Grid item sx={{ width: 1512, height: 30 }}>
                       {lecture.data.theme}
                     </Grid>
                   </Grid>
@@ -112,7 +128,7 @@ export const ProtectedPage = observer(() => {
           </Grid>
           <Typography
             sx={{
-              width: 400,
+              width: 1512,
               height: 30,
               color: "red",
               fontSize: 18,

@@ -8,36 +8,54 @@ export const PublicPage = observer(({ authDomain }: any) => {
     <>
       {!authenticated ? (
         <>
-          <Grid container sx={{ width: 400, height: 300 }}>
+          <Grid
+            container
+            sx={{
+              width: 1512,
+              height: 350,
+              display: "flex",
+              flexDirection: "column",
+              justifyContent: "center",
+              justifySelf: "center",
+            }}>
             <Typography
               sx={{
-                width: 400,
-                height: 30,
+                width: 1512,
+                height: 50,
               }}>
               Welcome to nestify!
             </Typography>
-            <Grid item sx={{ width: 400, height: 50 }}>
-              <Typography sx={{ width: 400, height: 30 }}>
+          </Grid>
+
+          <Grid
+            container
+            sx={{
+              width: 1512,
+              height: 350,
+              display: "flex",
+              flexDirection: "row",
+              justifyContent: "center",
+              justifySelf: "center",
+            }}>
+            <Grid item sx={{ width: 1512, height: 50 }}>
+              <Typography sx={{ width: 1512, height: 50 }}>
+                Already registered?
+              </Typography>
+            </Grid>
+            <Grid item sx={{ width: 1512, height: 50 }}>
+              <Typography sx={{ width: 1512, height: 50 }}>
+                Log in to your <Link to="/profile">Profile</Link>
+              </Typography>
+            </Grid>
+            <Grid item sx={{ width: 1512, height: 50 }}>
+              <Typography sx={{ width: 1512, height: 50 }}>
                 Don't have an account yet?
               </Typography>
             </Grid>
-          </Grid>
-          <Grid
-            container
-            sx={{ width: 400, height: 50, justifyContent: "space-evenly" }}>
-            <Grid item sx={{ width: 40, height: 50 }}>
-              <Typography sx={{ width: 40, height: 30 }}>Click</Typography>
-            </Grid>
-            <Grid item sx={{ width: 40, height: 50 }}>
-              <Link to="/signup">
-                <Typography sx={{ width: 40, height: 30 }}>here</Typography>
-              </Link>
-            </Grid>
-            <Grid item sx={{ width: 40, height: 50 }}>
-              <Typography sx={{ width: 40, height: 30 }}>to</Typography>
-            </Grid>
-            <Grid item sx={{ width: 40, height: 50 }}>
-              <Typography sx={{ width: 40, height: 30 }}>subscribe</Typography>
+            <Grid item sx={{ width: 1512, height: 50 }}>
+              <Typography sx={{ width: 1512, height: 50 }}>
+                Click <Link to="/signup">here</Link> to subscribe
+              </Typography>
             </Grid>
           </Grid>
         </>
