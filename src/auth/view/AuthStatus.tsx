@@ -1,13 +1,11 @@
 import { useNavigate } from "react-router-dom";
 import { observer } from "mobx-react-lite";
 import { Button, Grid, Typography } from "@mui/material";
-import { useStores } from "../../StoreContext";
 import { toJS } from "mobx";
 
 export const AuthStatus = observer(({ authDomain }: any) => {
   let navigate = useNavigate();
-  const { userDomain } = useStores();
-  const user = toJS(userDomain.userStore.initialUser);
+  const user = toJS(authDomain.authStore.currentUser);
   return (
     <>
       {!authDomain.authStore.authenticated ? (
@@ -17,6 +15,8 @@ export const AuthStatus = observer(({ authDomain }: any) => {
             width: 1512,
             height: 150,
             display: "flex",
+            position: "fixed",
+            top: 0,
             flexDirection: "column",
             justifyContent: "center",
             justifySelf: "center",

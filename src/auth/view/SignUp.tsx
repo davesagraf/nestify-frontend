@@ -3,7 +3,6 @@ import { useLocation, useNavigate } from "react-router-dom";
 import { Button, Dialog, Grid, TextField, Typography } from "@mui/material";
 import { observer } from "mobx-react-lite";
 import { SignUpRequestDTO } from "../services/dto/request/SignUpRequestDTO";
-import ArrowBackIcon from "@mui/icons-material/ArrowBack";
 
 export const SignUp = observer(({ authDomain }: any) => {
   const [userData, setUserData] = useState<SignUpRequestDTO>({
@@ -38,20 +37,6 @@ export const SignUp = observer(({ authDomain }: any) => {
 
   return (
     <>
-      <Button
-        sx={{
-          transform: "translate(75px, 75px)",
-          width: 100,
-          height: 100,
-          display: "flex",
-          flexDirection: "column",
-          zIndex: "1301",
-          cursor: "pointer",
-        }}
-        startIcon={<ArrowBackIcon />}
-        onClick={() => navigate(from, { replace: true })}>
-        BACK
-      </Button>
       {!authDomain.authStore.authenticated ? (
         <>
           <Grid

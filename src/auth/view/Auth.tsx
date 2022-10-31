@@ -2,7 +2,7 @@ import { useLocation, Navigate } from "react-router-dom";
 import { observer } from "mobx-react-lite";
 import { useStores } from "../../StoreContext";
 
-export const Auth = observer(({ children }: { children: JSX.Element }) => {
+export const Auth = observer(({ children }: { children: JSX.Element}) => {
   const { authDomain } = useStores();
   let location = useLocation();
 

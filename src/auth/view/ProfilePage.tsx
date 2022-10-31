@@ -3,12 +3,11 @@ import { useLocation, useNavigate } from "react-router-dom";
 import { Button, Dialog, Grid, Typography } from "@mui/material";
 import { observer } from "mobx-react-lite";
 import { useStores } from "../../StoreContext";
-import { toJS } from "mobx";
 import { IdleTimer } from "../../utils/IdleTimer";
 
-export const ProtectedPage = observer(() => {
+export const ProfilePage = observer(() => {
   const { authDomain, userDomain } = useStores();
-  const user = toJS(userDomain.userStore.initialUser);
+  const user  = userDomain.userStore.initialUser;
   const location = useLocation();
   const navigate = useNavigate();
   const [errorMessage, setErrorMessage] = useState<string>("");
@@ -79,6 +78,26 @@ export const ProtectedPage = observer(() => {
 
       <Grid container sx={{ width: 1512, height: 982 }}>
         <>
+          <Button
+          variant="outlined"
+          sx={{
+            width: 100,
+            height: 50,
+            ml: 10
+            }}
+           onClick={() => {
+            navigate("/lectures")
+          }}>ALL LECTURES</Button>
+          <Button
+          variant="outlined"
+          sx={{
+            width: 100,
+            height: 50,
+            ml: 10
+            }}
+           onClick={() => {
+            navigate("/account")
+          }}>MY ACCOUNT</Button>
           <Typography
             sx={{
               width: 1512,

@@ -6,7 +6,7 @@ export interface ILectureData {
   links: string[];
 }
 
-export interface ILectureStore {
+export interface ILecture {
   id: number;
   createdAt?: string;
   updatedAt?: string;
@@ -14,4 +14,9 @@ export interface ILectureStore {
   content: string;
   data: ILectureData;
   users: IUserStore[];
+}
+
+export interface ILectureStore {
+  lectures: ILecture[];
+  lecture: ILecture;
 }

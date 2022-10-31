@@ -1,9 +1,10 @@
 import { Grid, Typography } from "@mui/material";
 import { observer } from "mobx-react-lite";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 
 export const PublicPage = observer(({ authDomain }: any) => {
   const authenticated = authDomain.authStore.authenticated;
+  const navigate = useNavigate();
   return (
     <>
       {!authenticated ? (
@@ -59,7 +60,7 @@ export const PublicPage = observer(({ authDomain }: any) => {
             </Grid>
           </Grid>
         </>
-      ) : null}
+      ) : navigate("/account")}
     </>
   );
 });

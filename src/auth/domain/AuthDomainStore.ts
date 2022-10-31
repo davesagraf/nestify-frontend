@@ -1,3 +1,5 @@
+import { toJS } from "mobx";
+import { IUser } from "../../user/store/IUserStore";
 import { AuthService } from "../services/AuthService";
 import { LoginRequestDTO } from "../services/dto/request/LoginRequestDTO";
 import { SignUpRequestDTO } from "../services/dto/request/SignUpRequestDTO";
@@ -14,10 +16,13 @@ export class AuthDomainStore implements IAuthDomainStore {
 
   async login(loginRequest: LoginRequestDTO, setErrorMessage: any) {
     try {
-      const tokenPayloadDto: any = await this.authService.login(loginRequest);
-      localStorage.setItem("access_token", tokenPayloadDto.access_token);
+      const response: any = await this.authService.login(loginRequest);
+      localStorage.setItem("access_token", response.access_token);
       
       this.setAuthenticated(true);
+      this.setCurrentUser(response.user);
+
+      return response.user;
     } catch (err: any) {
       setErrorMessage(err.error);
     }
@@ -40,6 +45,10 @@ export class AuthDomainStore implements IAuthDomainStore {
 
   private setUserExists(userExists: boolean) {
     this.authStore.userExists = userExists;
+  }
+
+  private setCurrentUser(currentUser: IUser) {
+    this.authStore.currentUser = currentUser;
   }
 
   getAccessToken() {

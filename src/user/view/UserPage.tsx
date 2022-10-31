@@ -1,19 +1,45 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { useNavigate, useLocation, useParams } from "react-router-dom";
-import { Box, Button, Dialog, TextField, Typography } from "@mui/material";
+import { Button, Grid, Link, TextField, Typography } from "@mui/material";
 import { observer } from "mobx-react-lite";
-import { GetUserRequestDTO } from "../services/dto/request/GetUserRequestDTO";
+import { useStores } from "../../StoreContext";
 
-export const UserPage = observer(({userDomain}: any) => {
-  const [currentUser, setCurrentUser] = useState<GetUserRequestDTO>();
+export const UserPage = observer(() => {
+  const {userDomain} = useStores();
+  const user = userDomain.userStore.initialUser;
+  const [errorMessage, setErrorMessage] = useState<string>();
   const navigate = useNavigate();
   const location = useLocation();
-  const {id} = useParams();
+  useEffect(() => {
+    userDomain.getUserProfile(setErrorMessage);
+  }, [])
   return (
     <>
-      <Typography sx={{ width: 400, height: 300 }}>
-        This is profile of {currentUser?.firstName}
+    <Grid container sx={{width: 1512, height: 900, textAlign: "center"}}>
+      <Grid item sx={{width: 500, height: 500, ml: '506px', mt: "100px"}}>
+      <Typography sx={{ width: 500, height: 100, fontSize: 25 }}>
+        Account
       </Typography>
+      <Typography sx={{ width: 500, height: 50 }}>
+        First Name: {user.firstName}
+      </Typography>
+      <Typography sx={{ width: 500, height: 50 }}>
+        Last Name: {user.lastName}
+      </Typography>
+      <Typography sx={{ width: 500, height: 50 }}>
+        Email: {user.email}
+      </Typography>
+      <Typography sx={{ width: 500, height: 50 }}>
+        Role: {user.role}
+      </Typography>
+      <Typography sx={{ width: 500, height: 50 }}>
+        Registered: {user.createdAt}
+      </Typography>
+      <Typography sx={{ width: 500, height: 50 }}>
+        <Link sx={{cursor: "pointer"}} onClick={() => {navigate("/lectures")}}>lectures: </Link>
+      </Typography>
+        </Grid>
+      </Grid>
     </>
   );
 });

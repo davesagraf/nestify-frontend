@@ -8,13 +8,14 @@ const user: IUser = {
   lastName: '',
   isActive: true,
   lectures: [],
-  role: UserRole.REGULAR,
+  role: UserRole.ADMIN || UserRole.REGULAR,
   createdAt: '',
   updatedAt: ''
 }
 
 export class UserStore {
   public initialUser = user;
+  public users = [];
 
   constructor() {
     makeAutoObservable(this);

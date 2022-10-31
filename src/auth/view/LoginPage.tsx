@@ -3,7 +3,6 @@ import { useNavigate, useLocation } from "react-router-dom";
 import { Button, Dialog, Grid, TextField, Typography } from "@mui/material";
 import { observer } from "mobx-react-lite";
 import { LoginRequestDTO } from "../services/dto/request/LoginRequestDTO";
-import ArrowBackIcon from "@mui/icons-material/ArrowBack";
 
 export const LoginPage = observer(({ authDomain }: any) => {
   const [errorMessage, setErrorMessage] = useState<string>("");
@@ -27,21 +26,6 @@ export const LoginPage = observer(({ authDomain }: any) => {
 
   return (
     <>
-      <Button
-        sx={{
-          transform: "translate(75px, -45px)",
-          width: 100,
-          height: 100,
-          display: "flex",
-          flexDirection: "column",
-          position: "relative",
-          zIndex: "1301",
-          cursor: "pointer",
-        }}
-        startIcon={<ArrowBackIcon />}
-        onClick={() => navigate(-1)}>
-        BACK
-      </Button>
       {!authDomain.authStore.authenticated ? (
         <>
           <Grid
