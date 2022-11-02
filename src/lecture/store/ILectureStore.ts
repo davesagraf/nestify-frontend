@@ -1,4 +1,4 @@
-import { IUserStore } from "../../user/store/IUserStore";
+import { IUser, IUserStore } from "../../user/store/IUserStore";
 
 export interface ILectureData {
   image: string;
@@ -19,4 +19,5 @@ export interface ILecture {
 export interface ILectureStore {
   lectures: ILecture[];
   lecture: ILecture;
+  lectureUsers: IUser[];
 }
