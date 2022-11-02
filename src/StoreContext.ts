@@ -1,8 +1,12 @@
 import React from "react";
 import { UserDomainStore } from "./user/domain/UserDomainStore";
 import { AuthDomainStore } from "./auth/domain/AuthDomainStore";
-import { makeAutoObservable } from "mobx";
+import { configure, makeAutoObservable } from "mobx";
 import { LectureDomainStore } from "./lecture/domain/LectureDomainStore";
+
+configure({
+  enforceActions: "never",
+})
 
 class RootStore {
   public userDomain = new UserDomainStore();

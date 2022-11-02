@@ -21,4 +21,6 @@ export interface IUser {
 export interface IUserStore {
   initialUser: IUser;
   users: IUser[];
+  user: IUser;
+  userLectures: ILecture[];
 }

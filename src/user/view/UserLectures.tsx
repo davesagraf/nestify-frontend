@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import { useNavigate } from "react-router-dom";
+import { useLocation, useNavigate, useParams } from "react-router-dom";
 import {
   Alert,
   AlertTitle,
@@ -19,13 +19,17 @@ import { toJS } from "mobx";
 import { UserRole } from "../../user/store/IUserStore";
 import { generateUUID } from "../../utils/uuid";
 
-export const LecturesTable = observer(() => {
-  const { lectureDomain, userDomain, authDomain } = useStores();
+export const UserLectures = observer(() => {
+  const { id } = useParams();
+  const { userDomain, authDomain } = useStores();
   const [errorMessage, setErrorMessage] = useState<string>("");
   const navigate = useNavigate();
+  const location = useLocation();
+  const userId = id;
 
   const currentUser = toJS(authDomain.authStore.currentUser);
-  let lectures = toJS(lectureDomain.lectureStore.lectures);
+
+  let lectures = toJS(userDomain.userStore.userLectures);
 
   const AlertMessage = () => {
     return (
@@ -49,7 +53,7 @@ export const LecturesTable = observer(() => {
       }
     }
     if (currentUser.role === UserRole.ADMIN) {
-      lectureDomain.getLectures(setErrorMessage);
+      userDomain.getUserLectures(userId, setErrorMessage);
     }
   }, [currentUser.role]);
 
@@ -78,7 +82,9 @@ export const LecturesTable = observer(() => {
                       <Link
                         sx={{ cursor: "pointer" }}
                         onClick={() => {
-                          navigate(`${lecture.id}`);
+                          if(location.pathname === `/users/${userId}/lectures`) {
+                            navigate(`/lectures/${lecture.id}`, { replace: true });
+                          }
                         }}>
                         see lecture
                       </Link>

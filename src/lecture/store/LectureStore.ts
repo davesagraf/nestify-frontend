@@ -1,5 +1,9 @@
-import { makeAutoObservable } from "mobx";
-import { ILecture, ILectureData } from "./ILectureStore";
+import { configure, makeAutoObservable } from "mobx";
+import { ILecture } from "./ILectureStore";
+
+configure({
+  enforceActions: "never",
+})
 
 const lectures: ILecture[] = [];
 const lecture: ILecture = {

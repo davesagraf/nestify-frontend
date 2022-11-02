@@ -4,6 +4,7 @@ import { Button, Dialog, Grid, Typography } from "@mui/material";
 import { observer } from "mobx-react-lite";
 import { useStores } from "../../StoreContext";
 import { IdleTimer } from "../../utils/IdleTimer";
+import { generateUUID } from "../../utils/uuid";
 
 export const ProfilePage = observer(() => {
   const { authDomain, userDomain } = useStores();
@@ -78,6 +79,17 @@ export const ProfilePage = observer(() => {
 
       <Grid container sx={{ width: 1512, height: 982 }}>
         <>
+        <Grid item sx={{width: 100, height: 200, display: "flex", flexDirection: "column", justifyContent: "space-evenly"}}>
+        <Button
+          variant="outlined"
+          sx={{
+            width: 100,
+            height: 50,
+            ml: 10
+            }}
+           onClick={() => {
+            navigate("/users")
+          }}>ALL USERS</Button>
           <Button
           variant="outlined"
           sx={{
@@ -98,6 +110,7 @@ export const ProfilePage = observer(() => {
            onClick={() => {
             navigate("/account")
           }}>MY ACCOUNT</Button>
+          </Grid>
           <Typography
             sx={{
               width: 1512,
@@ -116,10 +129,9 @@ export const ProfilePage = observer(() => {
             }}>
             Last name: {user.lastName}
           </Typography>
-          <Grid container sx={{ width: 1512, height: 900 }}>
-            {user.lectures.map((lecture, index) => (
-              <>
-                <Grid container key={index} sx={{ width: 1512, height: 450 }}>
+          <Grid key={generateUUID()} container sx={{ width: 1512, height: 900 }}>
+            {user.lectures.map((lecture) => (
+                <Grid container key={generateUUID()} sx={{ width: 1512, height: 450 }}>
                   <Typography sx={{ width: 1512, height: 30, color: "white" }}>
                     {lecture.title}
                   </Typography>
@@ -130,19 +142,16 @@ export const ProfilePage = observer(() => {
                     <Grid item sx={{ width: 1512, height: 30 }}>
                       {lecture.data.image}
                     </Grid>
-                    {lecture.data.links.map((link, idx) => (
-                      <>
-                        <Grid key={idx} item sx={{ width: 1512, height: 25 }}>
-                          {link}
-                        </Grid>
-                      </>
+                    {lecture.data.links.map((link) => (
+                      <Grid key={generateUUID()} item sx={{ width: 1512, height: 25 }}>
+                        {link}
+                      </Grid>
                     ))}
                     <Grid item sx={{ width: 1512, height: 30 }}>
                       {lecture.data.theme}
                     </Grid>
                   </Grid>
                 </Grid>
-              </>
             ))}
           </Grid>
           <Typography

@@ -19,13 +19,14 @@ import { toJS } from "mobx";
 import { UserRole } from "../../user/store/IUserStore";
 import { generateUUID } from "../../utils/uuid";
 
-export const LecturesTable = observer(() => {
-  const { lectureDomain, userDomain, authDomain } = useStores();
-  const [errorMessage, setErrorMessage] = useState<string>("");
+export const UsersTable = observer(() => {
+  const { userDomain, authDomain } = useStores();
+  const [errorMessage, setErrorMessage] = useState<any>();
   const navigate = useNavigate();
 
   const currentUser = toJS(authDomain.authStore.currentUser);
-  let lectures = toJS(lectureDomain.lectureStore.lectures);
+
+  let users = toJS(userDomain.userStore.users);
 
   const AlertMessage = () => {
     return (
@@ -49,7 +50,7 @@ export const LecturesTable = observer(() => {
       }
     }
     if (currentUser.role === UserRole.ADMIN) {
-      lectureDomain.getLectures(setErrorMessage);
+        userDomain.getAllUsers(setErrorMessage);
     }
   }, [currentUser.role]);
 
@@ -61,16 +62,15 @@ export const LecturesTable = observer(() => {
             <Table sx={{ minWidth: 1512 }} aria-label="simple table">
               <TableHead>
                 <TableRow>
-                  <TableCell align="center">Lecture</TableCell>
-                  <TableCell align="center">Title</TableCell>
-                  <TableCell align="center">Content</TableCell>
-                  <TableCell align="center">Image</TableCell>
-                  <TableCell align="center">Links</TableCell>
-                  <TableCell align="center">Theme</TableCell>
+                  <TableCell align="center">User</TableCell>
+                  <TableCell align="center">First Name</TableCell>
+                  <TableCell align="center">Last Name</TableCell>
+                  <TableCell align="center">Email</TableCell>
+                  <TableCell align="center">Role</TableCell>
                 </TableRow>
               </TableHead>
               <TableBody>
-                {lectures.map((lecture: any) => (
+                {users.map((user: any) => (
                   <TableRow
                     key={generateUUID()}
                     sx={{ "&:last-child td, &:last-child th": { border: 0 } }}>
@@ -78,16 +78,15 @@ export const LecturesTable = observer(() => {
                       <Link
                         sx={{ cursor: "pointer" }}
                         onClick={() => {
-                          navigate(`${lecture.id}`);
+                          navigate(`${user.id}`);
                         }}>
-                        see lecture
+                        see user
                       </Link>
                     </TableCell>
-                    <TableCell align="center">{lecture.title}</TableCell>
-                    <TableCell align="center">{lecture.content}</TableCell>
-                    <TableCell align="center">{lecture.data.image}</TableCell>
-                    <TableCell align="center">{lecture.data.links}</TableCell>
-                    <TableCell align="center">{lecture.data.theme}</TableCell>
+                    <TableCell align="center">{user.firstName}</TableCell>
+                    <TableCell align="center">{user.lastName}</TableCell>
+                    <TableCell align="center">{user.email}</TableCell>
+                    <TableCell align="center">{user.role}</TableCell>
                   </TableRow>
                 ))}
               </TableBody>

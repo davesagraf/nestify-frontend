@@ -15,7 +15,6 @@ export const AuthStatus = observer(({ authDomain }: any) => {
             width: 1512,
             height: 150,
             display: "flex",
-            position: "fixed",
             top: 0,
             flexDirection: "column",
             justifyContent: "center",
@@ -54,6 +53,7 @@ export const AuthStatus = observer(({ authDomain }: any) => {
                 width: 100,
                 height: 50,
                 transform: "translate(975px, -35px)",
+                zIndex: "1301"
               }}
               variant="outlined"
               onClick={() => {
