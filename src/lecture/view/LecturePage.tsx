@@ -20,12 +20,14 @@ import { toJS } from "mobx";
 import { useStores } from "../../StoreContext";
 import { LectureUsers } from "./LectureUsers";
 import { ApplyLectureRequestDTO } from "../services/dto/request/ApplyLectureRequestDTO";
+import { LectureUsersList } from "./LectureUsersList";
 
 export const LecturePage = observer(() => {
   const { id } = useParams();
   const { lectureDomain } = useStores();
   const [errorMessage, setErrorMessage] = useState<string>("");
   const [open, setOpen] = useState<boolean>(false);
+  const [usersChanged, setUsersChanged] = useState<boolean>(false);
   let lectureId: number = parseInt(`${id}`, 10);
 
   const [applyData, setApplyData] = useState<ApplyLectureRequestDTO>({
@@ -40,6 +42,11 @@ export const LecturePage = observer(() => {
   useEffect(() => {
     lectureDomain.getLectureById(id, setErrorMessage);
   }, []);
+
+  useEffect(() => {
+    lectureDomain.getLectureUsers(`${id}`, setErrorMessage);
+    setUsersChanged(false);
+  }, [usersChanged]);
 
   const handleOpenDialog = () => {
     setOpen(true);
@@ -79,6 +86,7 @@ export const LecturePage = observer(() => {
             }}
             onClick={() => {
               lectureDomain.applyLecture(applyData, setErrorMessage);
+              setUsersChanged(true);
               handleCloseDialog();
             }}>
             Apply
@@ -95,24 +103,25 @@ export const LecturePage = observer(() => {
           justifyContent: "center",
         }}>
         <Card
-          sx={{ width: 550, height: 550, textAlign: "center", ml: "481px" }}>
+          sx={{ width: 756, height: 900, textAlign: "center", ml: "378px" }}>
           <CardHeader
-            sx={{ width: 490, height: 150, textAlign: "center" }}
+            sx={{ width: 378, height: 150, textAlign: "center", ml: "189px" }}
             title={
-              <Typography sx={{ width: 490, height: 50, textAlign: "center" }}>
+              <Typography sx={{ width: 378, height: 50, textAlign: "center" }}>
                 {lecture.title}
               </Typography>
             }></CardHeader>
           <CardMedia
-            sx={{ ml: "225px", width: "100px", height: "100px" }}
+            sx={{ ml: "189px", width: "378px", height: "100px" }}
             component="img"
             image={lecture.data.image}
             alt="Lecture Picture"
           />
-          <CardContent sx={{ width: 490, height: 100, textAlign: "center" }}>
+          <LectureUsersList usersChanged={usersChanged} setUsersChanged={setUsersChanged} />
+          <CardContent sx={{ width: 756, height: 100, textAlign: "center" }}>
             <Typography
               sx={{
-                width: 490,
+                width: 756,
                 height: 100,
                 textAlign: "center",
                 color: "black",
@@ -122,7 +131,7 @@ export const LecturePage = observer(() => {
           </CardContent>
           <CardActions
             sx={{
-              width: 490,
+              width: 756,
               height: 50,
               textAlign: "center",
               display: "flex",
