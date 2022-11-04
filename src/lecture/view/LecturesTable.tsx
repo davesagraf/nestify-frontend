@@ -3,6 +3,7 @@ import { useNavigate } from "react-router-dom";
 import {
   Alert,
   AlertTitle,
+  Button,
   Grid,
   Link,
   Paper,
@@ -18,10 +19,23 @@ import { useStores } from "../../StoreContext";
 import { toJS } from "mobx";
 import { UserRole } from "../../user/store/IUserStore";
 import { generateUUID } from "../../utils/uuid";
+import { CreateLectureForm } from "./CreateLectureForm";
+import { CreateLectureRequestDTO } from "../services/dto/request/CreateLectureRequestDTO";
 
 export const LecturesTable = observer(() => {
   const { lectureDomain, userDomain, authDomain } = useStores();
   const [errorMessage, setErrorMessage] = useState<string>("");
+  const [dialogOpen, setDialogOpen] = useState(false);
+  const [lectureData, setLectureData] = useState<CreateLectureRequestDTO>({
+    title: "",
+    content: "",
+    data: {
+      image: "",
+      theme: "",
+      links: [""],
+    },
+    users: [],
+  });
   const navigate = useNavigate();
 
   const currentUser = toJS(authDomain.authStore.currentUser);
@@ -53,10 +67,41 @@ export const LecturesTable = observer(() => {
     }
   }, [currentUser.role]);
 
+  const handleOpenDialog = () => {
+    setDialogOpen(true);
+  };
+
+  const handleCloseDialog = () => {
+    setLectureData({
+      title: "",
+      content: "",
+      data: {
+        image: "",
+        theme: "",
+        links: [""],
+      },
+      users: [],
+    });
+    setDialogOpen(false);
+  };
+
   return (
     <>
       {currentUser.role === UserRole.ADMIN ? (
         <>
+          <Button variant="outlined" onClick={handleOpenDialog}>
+            Create Lecture
+          </Button>
+          {dialogOpen ? (
+            <CreateLectureForm
+              dialogOpen={dialogOpen}
+              setDialogOpen={setDialogOpen}
+              handleOpenDialog={handleOpenDialog}
+              handleCloseDialog={handleCloseDialog}
+              lectureData={lectureData}
+              setLectureData={setLectureData}
+            />
+          ) : null}
           <TableContainer component={Paper}>
             <Table sx={{ minWidth: 1512 }} aria-label="simple table">
               <TableHead>

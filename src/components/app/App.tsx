@@ -17,7 +17,6 @@ import { UsersTable } from "../../user/view/UsersTable";
 import { UserLectures } from "../../user/view/UserLectures";
 import { generateUUID } from "../../utils/uuid";
 
-
 export const App = observer(() => {
   const { authDomain } = useStores();
   return (

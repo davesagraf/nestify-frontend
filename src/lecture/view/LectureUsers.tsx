@@ -41,11 +41,13 @@ export const LectureUsers: React.FC<{
   setApplyData: any;
 }> = observer(({ applyData, setApplyData }) => {
   const theme = useTheme();
-  const [personName, setPersonName] = useState<string[]>([]);
   const [errorMessage, setErrorMessage] = useState<string>("");
-  const { userDomain } = useStores();
+  const { userDomain, lectureDomain } = useStores();
   let users = toJS(userDomain.userStore.users);
   let names = users.map((user) => user.firstName + " " + user.lastName);
+  let initialNames = toJS(lectureDomain.lectureStore.lectureUsers).map((user) => user.firstName + " " + user.lastName);
+  
+  const [personName, setPersonName] = useState<string[]>(initialNames);
 
   useEffect(() => {
     userDomain.getAllUsers(setErrorMessage);
@@ -59,7 +61,6 @@ export const LectureUsers: React.FC<{
     setTimeout(() => {
       let appliedUserIds = appliedUserNames.map((user) => user.id);
       setApplyData({ ...applyData, userIds: appliedUserIds });
-      console.log("userIds", appliedUserIds);
     }, 10);
   }, [personName]);
 

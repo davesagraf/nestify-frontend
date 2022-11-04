@@ -1,81 +1,104 @@
 import { IUser } from "../../user/store/IUserStore";
 import { API_URL } from "../../utils/url";
+import { ILecture } from "../store/ILectureStore";
 import { ApplyLectureRequestDTO } from "./dto/request/ApplyLectureRequestDTO";
+import { CreateLectureRequestDTO } from "./dto/request/CreateLectureRequestDTO";
 import { GetLectureRequestDTO } from "./dto/request/GetLectureRequestDTO";
 
 export class LectureService {
-    async getLectures(): Promise<GetLectureRequestDTO[]> {
-        const jwtToken = localStorage.getItem("access_token");
-        const response = await fetch(`${API_URL}/lectures`, {
-          method: "GET",
-          headers: {
-            "Content-Type": "application/json",
-            "Authorization": `Bearer ${jwtToken}`
-          },
-        });
-    
-        const parsedResponse = await response.json();
-        
-        if (!response.ok) {
-          throw parsedResponse;
-        }
-        return parsedResponse;
-      }
+  async getLectures(): Promise<GetLectureRequestDTO[]> {
+    const jwtToken = localStorage.getItem("access_token");
+    const response = await fetch(`${API_URL}/lectures`, {
+      method: "GET",
+      headers: {
+        "Content-Type": "application/json",
+        Authorization: `Bearer ${jwtToken}`,
+      },
+    });
 
-      async getLectureUsers(lectureId: string): Promise<IUser[]> {
-        const jwtToken = localStorage.getItem("access_token");
-        const response = await fetch(`${API_URL}/lectures/${lectureId}/users`, {
-          method: "GET",
-          headers: {
-            "Content-Type": "application/json",
-            "Authorization": `Bearer ${jwtToken}`
-          },
-        });
-    
-        const parsedResponse = await response.json();
-    
-        if (!response.ok) {
-          throw parsedResponse;
-        }
-        return parsedResponse;
-      }
+    const parsedResponse = await response.json();
 
-      async applyLecture(applyLectureRequest: ApplyLectureRequestDTO): Promise<IUser[]> {
-        const jwtToken = localStorage.getItem("access_token");
-        const response = await fetch(`${API_URL}/lectures/apply`, {
-          method: "POST",
-          headers: {
-            "Content-Type": "application/json",
-            "Authorization": `Bearer ${jwtToken}`
-          },
-          body: JSON.stringify(applyLectureRequest),
-        });
+    if (!response.ok) {
+      throw parsedResponse;
+    }
+    return parsedResponse;
+  }
 
-        
-    
-        const parsedResponse = await response.json();
-        
-        if (!response.ok) {
-          throw parsedResponse;
-        }
-        return parsedResponse;
-      }
+  async getLectureUsers(lectureId: string): Promise<IUser[]> {
+    const jwtToken = localStorage.getItem("access_token");
+    const response = await fetch(`${API_URL}/lectures/${lectureId}/users`, {
+      method: "GET",
+      headers: {
+        "Content-Type": "application/json",
+        Authorization: `Bearer ${jwtToken}`,
+      },
+    });
 
-      async getLectureById(lectureId: string): Promise<GetLectureRequestDTO> {
-        const jwtToken = localStorage.getItem("access_token");
-        const response = await fetch(`${API_URL}/lectures/${lectureId}`, {
-          method: "GET",
-          headers: {
-            "Content-Type": "application/json",
-            "Authorization": `Bearer ${jwtToken}`
-          },
-        });
-    
-        const parsedResponse = await response.json();
-        
-        if (!response.ok) {
-          throw parsedResponse;
-        }
-        return parsedResponse;
-      }
+    const parsedResponse = await response.json();
+
+    if (!response.ok) {
+      throw parsedResponse;
+    }
+    return parsedResponse;
+  }
+
+  async applyLecture(
+    applyLectureRequest: ApplyLectureRequestDTO
+  ): Promise<IUser[]> {
+    const jwtToken = localStorage.getItem("access_token");
+    const response = await fetch(`${API_URL}/lectures/apply`, {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+        Authorization: `Bearer ${jwtToken}`,
+      },
+      body: JSON.stringify(applyLectureRequest),
+    });
+
+    const parsedResponse = await response.json();
+
+    if (!response.ok) {
+      throw parsedResponse;
+    }
+    return parsedResponse;
+  }
+
+  async getLectureById(lectureId: string): Promise<GetLectureRequestDTO> {
+    const jwtToken = localStorage.getItem("access_token");
+    const response = await fetch(`${API_URL}/lectures/${lectureId}`, {
+      method: "GET",
+      headers: {
+        "Content-Type": "application/json",
+        Authorization: `Bearer ${jwtToken}`,
+      },
+    });
+
+    const parsedResponse = await response.json();
+
+    if (!response.ok) {
+      throw parsedResponse;
+    }
+    return parsedResponse;
+  }
+
+  async createLecture(
+    createLectureRequest: CreateLectureRequestDTO
+  ): Promise<ILecture> {
+    const jwtToken = localStorage.getItem("access_token");
+    const response = await fetch(`${API_URL}/lectures`, {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+        Authorization: `Bearer ${jwtToken}`,
+      },
+      body: JSON.stringify(createLectureRequest),
+    });
+
+    const parsedResponse = await response.json();
+
+    if (!response.ok) {
+      throw parsedResponse;
+    }
+    return parsedResponse;
+  }
 }

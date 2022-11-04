@@ -5,6 +5,7 @@ import { LectureService } from "../services/LectureService";
 import { GetLectureRequestDTO } from "../services/dto/request/GetLectureRequestDTO";
 import { IUser } from "../../user/store/IUserStore";
 import { ApplyLectureRequestDTO } from "../services/dto/request/ApplyLectureRequestDTO";
+import { CreateLectureRequestDTO } from "../services/dto/request/CreateLectureRequestDTO";
 
 export class LectureDomainStore implements ILectureDomainStore {
   constructor(
@@ -16,6 +17,17 @@ export class LectureDomainStore implements ILectureDomainStore {
       const lectures = await this.lectureService.getLectures();
       this.setLectures(lectures);
       return lectures;
+    } catch (err: any) {
+      setErrorMessage(err.error);
+      return err.error;
+    }
+  }
+
+  async createLecture(createLectureRequest: CreateLectureRequestDTO, setErrorMessage: any): Promise<ILecture> {
+    try {
+      const newLecture = await this.lectureService.createLecture(createLectureRequest);
+      this.lectureStore.lectures.push(newLecture);
+      return newLecture;
     } catch (err: any) {
       setErrorMessage(err.error);
       return err.error;
