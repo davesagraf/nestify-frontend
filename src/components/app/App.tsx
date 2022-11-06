@@ -22,19 +22,19 @@ export const App = observer(() => {
   return (
     <>
       <Routes>
-        <Route key={generateUUID()} path="/" element={<PublicPage authDomain={authDomain} />} />
-        <Route key={generateUUID()} element={<Layout authDomain={authDomain} />}>
-          <Route key={generateUUID()} path="/login" element={<LoginPage authDomain={authDomain} />} />
-          <Route key={generateUUID()} path="/signup" element={<SignUp authDomain={authDomain} />} />
-          <Route key={generateUUID()} path="/profile" element={<Auth><ProfilePage /></Auth>} />
-          <Route key={generateUUID()} path="/account" element={<Auth><AccountPage/></Auth>} />
-          <Route key={generateUUID()} path="/lectures" element={<Auth><LecturesTable /></Auth>} />
-          <Route key={generateUUID()} path="/lectures/:id" element={<Auth><LecturePage /></Auth>} />
-          <Route key={generateUUID()} path="/users" element={<Auth><UsersTable /></Auth>} />
-          <Route key={generateUUID()} path="/users/:id" element={<Auth><UserPage /></Auth>} />
-          <Route key={generateUUID()} path="/users/:id/lectures" element={<Auth><UserLectures/></Auth>} />
+        <Route path="/" element={<PublicPage authDomain={authDomain} />} />
+        <Route element={<Layout authDomain={authDomain} />}>
+          <Route path="/login" element={<LoginPage authDomain={authDomain} />} />
+          <Route path="/signup" element={<SignUp authDomain={authDomain} />} />
+          <Route path="/profile" element={<Auth><ProfilePage /></Auth>} />
+          <Route path="/account" element={<Auth><AccountPage/></Auth>} />
+          <Route path="/lectures" element={<Auth><LecturesTable /></Auth>} />
+          <Route path="/lectures/:id" element={<Auth><LecturePage /></Auth>} />
+          <Route path="/users" element={<Auth><UsersTable /></Auth>} />
+          <Route path="/users/:id" element={<Auth><UserPage /></Auth>} />
+          <Route path="/users/:id/lectures" element={<Auth><UserLectures/></Auth>} />
         </Route>
-        <Route key={generateUUID()} path="*" element={<NotFound />} />
+        <Route path="*" element={<NotFound />} />
       </Routes>
     </>
   );

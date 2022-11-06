@@ -21,6 +21,7 @@ import { useStores } from "../../StoreContext";
 import { LectureUsers } from "./LectureUsers";
 import { ApplyLectureRequestDTO } from "../services/dto/request/ApplyLectureRequestDTO";
 import { LectureUsersList } from "./LectureUsersList";
+import { generateUUID } from "../../utils/uuid";
 
 export const LecturePage = observer(() => {
   const { id } = useParams();
@@ -55,12 +56,15 @@ export const LecturePage = observer(() => {
   const handleCloseDialog = () => {
     setOpen(false);
   };
+
   return (
     <>
       <Dialog open={open} onClose={handleCloseDialog}>
-        <DialogTitle>Select Lecture Users</DialogTitle>
+        <DialogTitle sx={{ textAlign: "center" }}>
+          Select Lecture Users
+        </DialogTitle>
         <DialogContent>
-          <DialogContentText>
+          <DialogContentText sx={{ mb: 2 }}>
             To select Users for this Lecture, please, click the Select Users
             button.
           </DialogContentText>
@@ -68,6 +72,7 @@ export const LecturePage = observer(() => {
         </DialogContent>
         <DialogActions>
           <Button
+            variant="contained"
             sx={{
               width: 100,
               height: 50,
@@ -78,6 +83,7 @@ export const LecturePage = observer(() => {
             Cancel
           </Button>
           <Button
+            variant="contained"
             sx={{
               width: 100,
               height: 50,
@@ -103,9 +109,20 @@ export const LecturePage = observer(() => {
           justifyContent: "center",
         }}>
         <Card
-          sx={{ width: 756, height: 900, textAlign: "center", ml: "378px" }}>
+          sx={{
+            width: 756,
+            height: 900,
+            textAlign: "center",
+            ml: "378px",
+            p: 0,
+          }}>
           <CardHeader
-            sx={{ width: 378, height: 150, textAlign: "center", ml: "189px" }}
+            sx={{
+              width: 378,
+              height: "50px",
+              textAlign: "center",
+              ml: "189px",
+            }}
             title={
               <Typography sx={{ width: 378, height: 50, textAlign: "center" }}>
                 {lecture.title}
@@ -114,34 +131,76 @@ export const LecturePage = observer(() => {
           <CardMedia
             sx={{ ml: "189px", width: "378px", height: "100px" }}
             component="img"
-            image={lecture.data.image}
+            image={lecture.data.image ? lecture.data.image : ""}
             alt="Lecture Picture"
           />
-          <LectureUsersList usersChanged={usersChanged} setUsersChanged={setUsersChanged} />
-          <CardContent sx={{ width: 756, height: 100, textAlign: "center" }}>
+          <Grid item sx={{ width: 756, height: 350, overflowY: "scroll" }}>
+            <LectureUsersList
+              usersChanged={usersChanged}
+              setUsersChanged={setUsersChanged}
+            />
+          </Grid>
+          <CardContent
+            sx={{
+              width: 706,
+              height: "250px",
+              textAlign: "center",
+              bgcolor: "#efefef",
+              ml: "25px",
+              mt: 0,
+              mb: 0,
+              p: 0,
+              borderRadius: "7px",
+            }}>
             <Typography
+              key={generateUUID()}
               sx={{
-                width: 756,
-                height: 100,
+                width: 706,
+                height: "75px",
                 textAlign: "center",
                 color: "black",
+                transform: "translate(0px, 45px)",
               }}>
               {lecture.content}
+            </Typography>
+            <Typography
+              key={generateUUID()}
+              sx={{
+                width: 706,
+                height: "100px",
+                textAlign: "center",
+                color: "black",
+                transform: "translate(0px, 45px)",
+              }}>
+              {lecture.data.links}
+            </Typography>
+            <Typography
+              key={generateUUID()}
+              sx={{
+                width: 706,
+                height: "75px",
+                textAlign: "center",
+                color: "black",
+                transform: "translate(0px, 15px)",
+              }}>
+              {lecture.data.theme}
             </Typography>
           </CardContent>
           <CardActions
             sx={{
               width: 756,
-              height: 50,
+              height: "50px",
               textAlign: "center",
               display: "flex",
               flexDirection: "row",
               justifyContent: "space-evenly",
+              mt: "25px",
             }}>
             <Button
-              variant="outlined"
+              key={generateUUID()}
+              variant="contained"
               sx={{
-                width: 100,
+                width: 125,
                 height: 50,
                 textAlign: "center",
                 cursor: "pointer",
@@ -150,9 +209,10 @@ export const LecturePage = observer(() => {
               Select Users
             </Button>
             <Button
-              variant="outlined"
+              key={generateUUID()}
+              variant="contained"
               sx={{
-                width: 100,
+                width: 125,
                 height: 50,
                 textAlign: "center",
                 cursor: "pointer",

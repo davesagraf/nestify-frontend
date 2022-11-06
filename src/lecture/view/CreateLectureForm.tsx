@@ -12,6 +12,7 @@ import {
   DialogContent,
   DialogContentText,
   DialogTitle,
+  Grid,
   TextField,
 } from "@mui/material";
 import { CreateLectureRequestDTO } from "../services/dto/request/CreateLectureRequestDTO";
@@ -98,13 +99,29 @@ export const CreateLectureForm: React.FC<{
 
   return (
     <>
-      <Dialog open={dialogOpen} onClose={handleCloseDialog}>
+      <Dialog PaperProps={
+        {
+          style: {
+            height: "500px",
+            padding: 0
+          }
+        }
+      } sx={{
+        width: 756,
+        ml: "378px",
+        textAlign: "center"
+        
+      }} open={dialogOpen} onClose={handleCloseDialog}>
         <DialogTitle>Create Lecture</DialogTitle>
-        <DialogContent>
+        <DialogContent sx={{p: 0}}>
           <DialogContentText>
             Fill out the form to create a new Lecture.
           </DialogContentText>
+          <Grid container sx={{width: 600, height: 450, m: 0}}>
+          <Grid item sx={{width: 600, height: 50, display: "flex",
+        flexDirection: "row", gap: "50px", ml: "100px", mt: 2, mb: 2}}>
           <TextField
+            InputProps={{ style: { width: 175, height: 50 } }}
             onChange={handleTitleChange}
             id="title"
             label="Title"
@@ -112,13 +129,30 @@ export const CreateLectureForm: React.FC<{
             variant="outlined"
           />
           <TextField
+            InputProps={{ style: { width: 175, height: 50 } }}
             onChange={handleContentChange}
             id="content"
             label="Content"
             type="text"
             variant="outlined"
           />
-          <Button variant="contained" component="label">
+          </Grid>
+          <Grid item sx={{width: 600, height: 50, display: "flex",
+        flexDirection: "row", gap: "50px", ml: "100px", mt: 2, mb: 2}}>
+          <TextField
+            InputProps={{ style: { width: 175, height: 50 } }}
+            onChange={handleThemeChange}
+            id="theme"
+            label="Theme"
+            type="text"
+            variant="outlined"
+          />
+          <Button 
+          sx={{
+            width: 175,
+            height: 50
+          }}
+          variant="contained" component="label">
             Upload Image
             <input
               type="file"
@@ -129,14 +163,8 @@ export const CreateLectureForm: React.FC<{
               onChange={handleImageChange}
             />
           </Button>
-          <TextField
-            onChange={handleThemeChange}
-            id="theme"
-            label="Theme"
-            type="text"
-            variant="outlined"
-          />
-
+          </Grid>
+          <Grid item sx={{width: 400, height: 150, ml: "100px", mt: 2, mb: 2}}>
           <Autocomplete
             onChange={(event, values) => handleLinksChange(event, values)}
             autoComplete
@@ -148,14 +176,22 @@ export const CreateLectureForm: React.FC<{
             getOptionLabel={(option) => option}
             defaultValue={[linkOptions[0]]}
             renderInput={(params) => (
-              <TextField {...params} label="Links" placeholder="Links" />
+              <TextField sx={{width: 400, height: 50}} {...params} label="Links" placeholder="Links" />
             )}
-            sx={{ width: "500px" }}
+            sx={{ width: "400px", height: "50px" }}
           />
+          </Grid>
+          </Grid>
         </DialogContent>
-        <DialogActions>
-          <Button onClick={handleCloseDialog}>Cancel</Button>
-          <Button onClick={handleCreateLecture}>Save</Button>
+        <DialogActions sx={{width: 600, height: 50, gap: 1}}>
+          <Button
+          sx={{width: 95, height: 50}}
+          variant="contained"
+           onClick={handleCloseDialog}>Cancel</Button>
+          <Button
+          variant="contained"
+          sx={{width: 95, height: 50, mr: 2}}
+           onClick={handleCreateLecture}>Save</Button>
         </DialogActions>
       </Dialog>
     </>

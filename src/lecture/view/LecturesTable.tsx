@@ -89,14 +89,12 @@ export const LecturesTable = observer(() => {
     <>
       {currentUser.role === UserRole.ADMIN ? (
         <>
-          <Button variant="outlined" onClick={handleOpenDialog}>
+          <Button sx={{width: 100, height: 50, m: 2}} variant="outlined" onClick={handleOpenDialog}>
             Create Lecture
           </Button>
           {dialogOpen ? (
             <CreateLectureForm
               dialogOpen={dialogOpen}
-              setDialogOpen={setDialogOpen}
-              handleOpenDialog={handleOpenDialog}
               handleCloseDialog={handleCloseDialog}
               lectureData={lectureData}
               setLectureData={setLectureData}

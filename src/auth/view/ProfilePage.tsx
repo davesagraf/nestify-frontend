@@ -140,13 +140,18 @@ export const ProfilePage = observer(() => {
                   </Typography>
                   <Grid container sx={{ width: 1512, height: 100 }}>
                     <Grid item sx={{ width: 1512, height: 30 }}>
-                      {lecture.data.image}
+                      {lecture.data.image ? lecture.data.image : ""}
                     </Grid>
-                    {lecture.data.links.map((link) => (
+                    <Grid item sx={{ width: 1512, height: 30 }}>
+                      <Typography sx={{ width: 1512, height: 30, color: "white" }}>
+                    {lecture.data.links}
+                  </Typography>
+                    </Grid>
+                    {/* {lecture.data.links.map((link) => (
                       <Grid key={generateUUID()} item sx={{ width: 1512, height: 25 }}>
                         {link}
                       </Grid>
-                    ))}
+                    ))} */}
                     <Grid item sx={{ width: 1512, height: 30 }}>
                       {lecture.data.theme}
                     </Grid>

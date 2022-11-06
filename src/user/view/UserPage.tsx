@@ -6,9 +6,7 @@ import {
   CardActions,
   CardContent,
   CardHeader,
-  CardMedia,
   Grid,
-  Link,
   Typography,
 } from "@mui/material";
 import { observer } from "mobx-react-lite";
@@ -22,8 +20,8 @@ export const UserPage = observer(() => {
   const navigate = useNavigate();
 
   const currentUser = toJS(authDomain.authStore.currentUser);
-  
-  let user = toJS(userDomain.userStore.user)
+
+  let user = toJS(userDomain.userStore.user);
 
   useEffect(() => {
     userDomain.getUserById(id, setErrorMessage);
@@ -50,13 +48,13 @@ export const UserPage = observer(() => {
             alignItems: "center",
           }}>
           <CardHeader
-            sx={{ width: 490, height: 150 }}
+            sx={{ width: 490, height: 100 }}
             title={
               <Typography sx={{ width: 490, height: 50 }}>
                 User # {user.id} details
               </Typography>
             }></CardHeader>
-          <CardContent sx={{ width: 490, height: 200 }}>
+          <CardContent sx={{ width: 490, height: 300 }}>
             <Typography
               sx={{
                 width: 490,
@@ -86,26 +84,28 @@ export const UserPage = observer(() => {
               Role: {user.role}
             </Typography>
           </CardContent>
-          <CardActions sx={{ width: 490, height: 50 }}>
-          <Button
-          variant="outlined"
-          sx={{
-            width: 100,
-            height: 50,
-            ml: 10
-            }}
-           onClick={() => {
-            navigate(`/users/${id}/lectures`)
-          }}>User Lectures</Button>
-            <Typography sx={{ width: 490, height: 40 }}>
-              <Link
-                sx={{ cursor: "pointer" }}
-                onClick={() => {
-                  navigate("/users");
-                }}>
-                Go back to Users
-              </Link>
-            </Typography>
+          <CardActions sx={{ width: 550, height: 50, p: 0 }}>
+            <Button
+              variant="contained"
+              sx={{
+                width: 175,
+                height: 50,
+                ml: "75px",
+                mr: 6,
+              }}
+              onClick={() => {
+                navigate(`/users/${id}/lectures`);
+              }}>
+              User Lectures
+            </Button>
+            <Button
+              variant="contained"
+              sx={{ width: 175, height: 50 }}
+              onClick={() => {
+                navigate("/users");
+              }}>
+              Go back to Users
+            </Button>
           </CardActions>
         </Card>
       </Grid>

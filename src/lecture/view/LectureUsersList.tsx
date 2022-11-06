@@ -95,35 +95,35 @@ export const LectureUsersList: React.FC<{
         </Grid>
         <Grid item sx={{ width: 756, height: 300 }}>
           {lectureUsers.length !== 0 ? (
-            <>
-              <List sx={{ width: 567, height: 300, ml: "94px" }}>
-                {lectureUsers.map((user) => (
-                  <>
-                    <ListItem
+            <List
+              key={generateUUID()}
+              sx={{ width: 567, height: 300, ml: "94px" }}>
+              {lectureUsers.map((user) => (
+                <ListItem
+                  key={generateUUID()}
+                  secondaryAction={
+                    <IconButton
                       key={generateUUID()}
-                      secondaryAction={
-                        <IconButton
-                          id={`${user.id}`}
-                          edge="end"
-                          aria-label="delete"
-                          onClick={handleDeleteLectureUsers}>
-                          <DeleteIcon />
-                        </IconButton>
-                      }>
-                      <ListItemAvatar>
-                        <Avatar>
-                          <PersonIcon />
-                        </Avatar>
-                      </ListItemAvatar>
-                      <ListItemText
-                        primary={
-                          user.firstName + " " + user.lastName
-                        }></ListItemText>
-                    </ListItem>
-                  </>
-                ))}
-              </List>
-            </>
+                      id={`${user.id}`}
+                      edge="end"
+                      aria-label="delete"
+                      onClick={handleDeleteLectureUsers}>
+                      <DeleteIcon key={generateUUID()} />
+                    </IconButton>
+                  }>
+                  <ListItemAvatar key={generateUUID()}>
+                    <Avatar key={generateUUID()}>
+                      <PersonIcon key={generateUUID()} />
+                    </Avatar>
+                  </ListItemAvatar>
+                  <ListItemText
+                    key={generateUUID()}
+                    primary={
+                      user.firstName + " " + user.lastName
+                    }></ListItemText>
+                </ListItem>
+              ))}
+            </List>
           ) : (
             <Alert
               sx={{
