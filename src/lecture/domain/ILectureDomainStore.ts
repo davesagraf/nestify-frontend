@@ -2,6 +2,7 @@ import { IUser } from "../../user/store/IUserStore";
 import { ApplyLectureRequestDTO } from "../services/dto/request/ApplyLectureRequestDTO";
 import { CreateLectureRequestDTO } from "../services/dto/request/CreateLectureRequestDTO";
 import { GetLectureRequestDTO } from "../services/dto/request/GetLectureRequestDTO";
+import { UpdateLectureRequestDTO } from "../services/dto/request/UpdateLectureRequestDTO";
 import { LectureService } from "../services/LectureService";
 import { ILecture, ILectureStore } from "../store/ILectureStore";
 
@@ -12,5 +13,7 @@ export interface ILectureDomainStore {
     getLectureUsers(lectureId: string, setErrorMessage: any): Promise<IUser[]> ;
     applyLecture(applyLectureRequest: ApplyLectureRequestDTO, setErrorMessage: any): Promise<IUser[]>;
     createLecture(createLectureRequest: CreateLectureRequestDTO, setErrorMessage: any): Promise<ILecture>;
+    updateLecture(userId: string, updateLectureRequest: UpdateLectureRequestDTO, setErrorMessage: any): Promise<ILecture>;
+    deleteLecture(lectureId: string, setErrorMessage: any): Promise<void>;
     readonly lectureService: LectureService;
 }

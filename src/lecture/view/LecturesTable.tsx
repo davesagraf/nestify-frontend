@@ -1,10 +1,11 @@
-import { useEffect, useState } from "react";
+import React, { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import {
   Alert,
   AlertTitle,
   Button,
   Grid,
+  IconButton,
   Link,
   Paper,
   Table,
@@ -20,12 +21,19 @@ import { toJS } from "mobx";
 import { UserRole } from "../../user/store/IUserStore";
 import { generateUUID } from "../../utils/uuid";
 import { CreateLectureForm } from "./CreateLectureForm";
+import { EditLectureForm } from "./EditLectureForm";
 import { CreateLectureRequestDTO } from "../services/dto/request/CreateLectureRequestDTO";
+import { UpdateLectureRequestDTO } from "../services/dto/request/UpdateLectureRequestDTO";
+import EditIcon from "@mui/icons-material/Edit";
+import DeleteIcon from "@mui/icons-material/Delete";
+import { DeleteLectureDialog } from "./DeleteLectureDialog";
 
 export const LecturesTable = observer(() => {
   const { lectureDomain, userDomain, authDomain } = useStores();
   const [errorMessage, setErrorMessage] = useState<string>("");
   const [dialogOpen, setDialogOpen] = useState(false);
+  const [editDialogOpen, setEditDialogOpen] = useState(false);
+  const [deleteDialogOpen, setDeleteDialogOpen] = useState(false);
   const [lectureData, setLectureData] = useState<CreateLectureRequestDTO>({
     title: "",
     content: "",
@@ -36,6 +44,22 @@ export const LecturesTable = observer(() => {
     },
     users: [],
   });
+
+  let lecture = toJS(lectureDomain.lectureStore.lecture);
+  let lectureUsers = toJS(lectureDomain.lectureStore.lectureUsers);
+
+  const [editLectureData, setEditLectureData] =
+    useState<UpdateLectureRequestDTO>({
+      title: lecture.title,
+      content: lecture.content,
+      data: {
+        image: lecture.data.image,
+        theme: lecture.data.theme,
+        links: lecture.data.links,
+      },
+      users: lectureUsers,
+    });
+
   const navigate = useNavigate();
 
   const currentUser = toJS(authDomain.authStore.currentUser);
@@ -85,11 +109,56 @@ export const LecturesTable = observer(() => {
     setDialogOpen(false);
   };
 
+  const handleOpenEditDialog = () => {
+    setEditDialogOpen(true);
+  };
+
+  const handleCloseEditDialog = () => {
+    setEditLectureData({
+      title: "",
+      content: "",
+      data: {
+        image: "",
+        theme: "",
+        links: [""],
+      },
+    });
+    setEditDialogOpen(false);
+  };
+
+  const handleEditLecture = async (event: React.MouseEvent<HTMLElement>) => {
+    lectureDomain.getLectureUsers(event.currentTarget.id, setErrorMessage);
+    await lectureDomain
+      .getLectureById(+event.currentTarget.id, setErrorMessage)
+      .then(() => {
+        handleOpenEditDialog();
+      });
+  };
+
+  const handleOpenDeleteDialog = () => {
+    setDeleteDialogOpen(true);
+  };
+
+  const handleCloseDeleteDialog = () => {
+    setDeleteDialogOpen(false);
+  };
+
+  const handleDeleteLecture = async (event: React.MouseEvent<HTMLElement>) => {
+    await userDomain
+      .getUserById(+event.currentTarget.id, setErrorMessage)
+      .then(() => {
+        handleOpenDeleteDialog();
+      });
+  };
+
   return (
     <>
       {currentUser.role === UserRole.ADMIN ? (
         <>
-          <Button sx={{width: 100, height: 50, m: 2}} variant="outlined" onClick={handleOpenDialog}>
+          <Button
+            sx={{ width: 100, height: 50, m: 2 }}
+            variant="outlined"
+            onClick={handleOpenDialog}>
             Create Lecture
           </Button>
           {dialogOpen ? (
@@ -98,6 +167,22 @@ export const LecturesTable = observer(() => {
               handleCloseDialog={handleCloseDialog}
               lectureData={lectureData}
               setLectureData={setLectureData}
+            />
+          ) : null}
+          {editDialogOpen ? (
+            <EditLectureForm
+              editDialogOpen={editDialogOpen}
+              handleCloseEditDialog={handleCloseEditDialog}
+              editLectureData={editLectureData}
+              setEditLectureData={setEditLectureData}
+              lecture={lecture}
+            />
+          ) : null}
+          {deleteDialogOpen ? (
+            <DeleteLectureDialog
+              deleteDialogOpen={deleteDialogOpen}
+              handleCloseDeleteDialog={handleCloseDeleteDialog}
+              lecture={lecture}
             />
           ) : null}
           <TableContainer component={Paper}>
@@ -110,6 +195,8 @@ export const LecturesTable = observer(() => {
                   <TableCell align="center">Image</TableCell>
                   <TableCell align="center">Links</TableCell>
                   <TableCell align="center">Theme</TableCell>
+                  <TableCell id="edit" align="center"></TableCell>
+                  <TableCell id="delete" align="center"></TableCell>
                 </TableRow>
               </TableHead>
               <TableBody>
@@ -131,6 +218,26 @@ export const LecturesTable = observer(() => {
                     <TableCell align="center">{lecture.data.image}</TableCell>
                     <TableCell align="center">{lecture.data.links}</TableCell>
                     <TableCell align="center">{lecture.data.theme}</TableCell>
+                    <TableCell align="center">
+                      <IconButton
+                        key={generateUUID()}
+                        id={`${lecture.id}`}
+                        edge="end"
+                        aria-label="edit"
+                        onClick={handleEditLecture}>
+                        <EditIcon key={generateUUID()} />
+                      </IconButton>
+                    </TableCell>
+                    <TableCell align="center">
+                      <IconButton
+                        key={generateUUID()}
+                        id={`${lecture.id}`}
+                        edge="end"
+                        aria-label="delete"
+                        onClick={handleDeleteLecture}>
+                        <DeleteIcon key={generateUUID()} />
+                      </IconButton>
+                    </TableCell>
                   </TableRow>
                 ))}
               </TableBody>

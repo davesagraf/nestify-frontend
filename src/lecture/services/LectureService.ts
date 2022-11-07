@@ -4,6 +4,7 @@ import { ILecture } from "../store/ILectureStore";
 import { ApplyLectureRequestDTO } from "./dto/request/ApplyLectureRequestDTO";
 import { CreateLectureRequestDTO } from "./dto/request/CreateLectureRequestDTO";
 import { GetLectureRequestDTO } from "./dto/request/GetLectureRequestDTO";
+import { UpdateLectureRequestDTO } from "./dto/request/UpdateLectureRequestDTO";
 
 export class LectureService {
   async getLectures(): Promise<GetLectureRequestDTO[]> {
@@ -92,6 +93,43 @@ export class LectureService {
         Authorization: `Bearer ${jwtToken}`,
       },
       body: JSON.stringify(createLectureRequest),
+    });
+
+    const parsedResponse = await response.json();
+
+    if (!response.ok) {
+      throw parsedResponse;
+    }
+    return parsedResponse;
+  }
+
+  async updateLecture(lectureId: string, updateLectureRequest: UpdateLectureRequestDTO): Promise<ILecture> {
+    const jwtToken = localStorage.getItem("access_token");
+    const response = await fetch(`${API_URL}/lectures/${lectureId}`, {
+      method: "PUT",
+      headers: {
+        "Content-Type": "application/json",
+        Authorization: `Bearer ${jwtToken}`,
+      },
+      body: JSON.stringify(updateLectureRequest),
+    });
+
+    const parsedResponse = await response.json();
+
+    if (!response.ok) {
+      throw parsedResponse;
+    }
+    return parsedResponse;
+  }
+
+  async deleteLecture(lectureId: string): Promise<void> {
+    const jwtToken = localStorage.getItem("access_token");
+    const response = await fetch(`${API_URL}/lectures/${lectureId}`, {
+      method: "DELETE",
+      headers: {
+        "Content-Type": "application/json",
+        Authorization: `Bearer ${jwtToken}`,
+      },
     });
 
     const parsedResponse = await response.json();

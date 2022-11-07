@@ -6,6 +6,7 @@ import { GetLectureRequestDTO } from "../services/dto/request/GetLectureRequestD
 import { IUser } from "../../user/store/IUserStore";
 import { ApplyLectureRequestDTO } from "../services/dto/request/ApplyLectureRequestDTO";
 import { CreateLectureRequestDTO } from "../services/dto/request/CreateLectureRequestDTO";
+import { UpdateLectureRequestDTO } from "../services/dto/request/UpdateLectureRequestDTO";
 
 export class LectureDomainStore implements ILectureDomainStore {
   constructor(
@@ -30,6 +31,34 @@ export class LectureDomainStore implements ILectureDomainStore {
       return newLecture;
     } catch (err: any) {
       setErrorMessage(err.error);
+      return err.error;
+    }
+  }
+
+  async updateLecture(
+    lectureId: string,
+    updateLectureRequest: UpdateLectureRequestDTO, 
+    setErrorMessage: any): Promise<ILecture> {
+    try {
+      const updatedLecture = await this.lectureService.updateLecture(
+        lectureId,
+        updateLectureRequest
+      );
+
+      return updatedLecture;
+    } catch (err: any) {
+      setErrorMessage(err.error);
+      return err.error;
+    }
+  }
+
+  async deleteLecture(lectureId: string, setErrorMessage: any): Promise<void> {
+    try {
+      const newLectureList = await this.lectureService.deleteLecture(lectureId);
+      this.setLectures(newLectureList);
+      return newLectureList;
+    } catch (err: any) {
+      setErrorMessage(err.error)
       return err.error;
     }
   }
@@ -67,7 +96,7 @@ export class LectureDomainStore implements ILectureDomainStore {
     }
   }
 
-  private setLectures(lectures: ILecture[]) {
+  private setLectures(lectures: any) {
     this.lectureStore.lectures = lectures ;
   }
 
