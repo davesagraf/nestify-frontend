@@ -1,7 +1,8 @@
 import { ILecture } from "../../lecture/store/ILectureStore";
 import { GetUserRequestDTO } from "../services/dto/request/GetUserRequestDTO";
+import { UpdateUserRequestDTO } from "../services/dto/request/UpdateUserRequestDTO";
 import { UserService } from "../services/UserService";
-import { IUserStore } from "../store/IUserStore";
+import { IUser, IUserStore } from "../store/IUserStore";
 
 export interface IUserDomainStore {
     userStore: IUserStore;
@@ -9,5 +10,6 @@ export interface IUserDomainStore {
     getUserProfile(setErrorMessage: any): Promise<GetUserRequestDTO>;
     getAllUsers(setErrorMessage: any): Promise<GetUserRequestDTO[]>;
     getUserLectures(userId: any, setErrorMessage: any): Promise<Partial<ILecture[]>>;
+    updateUser(userId: string, updateUserRequest: UpdateUserRequestDTO ): Promise<IUser>;
     readonly userService: UserService;
 }

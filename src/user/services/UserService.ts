@@ -1,6 +1,8 @@
 import { ILecture } from "../../lecture/store/ILectureStore";
 import { API_URL } from "../../utils/url";
+import { IUser } from "../store/IUserStore";
 import { GetUserRequestDTO } from "./dto/request/GetUserRequestDTO";
+import { UpdateUserRequestDTO } from "./dto/request/UpdateUserRequestDTO";
 
 export class UserService {
   async getUserById(userId: string): Promise<GetUserRequestDTO> {
@@ -11,6 +13,25 @@ export class UserService {
         "Content-Type": "application/json",
         "Authorization": `Bearer ${jwtToken}`
       },
+    });
+
+    const parsedResponse = await response.json();
+
+    if (!response.ok) {
+      throw parsedResponse;
+    }
+    return parsedResponse;
+  }
+
+  async updateUser(userId: string, updateUserRequest: UpdateUserRequestDTO): Promise<IUser> {
+    const jwtToken = localStorage.getItem("access_token");
+    const response = await fetch(`${API_URL}/users/${userId}`, {
+      method: "PUT",
+      headers: {
+        "Content-Type": "application/json",
+        Authorization: `Bearer ${jwtToken}`,
+      },
+      body: JSON.stringify(updateUserRequest),
     });
 
     const parsedResponse = await response.json();

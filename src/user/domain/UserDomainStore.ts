@@ -4,6 +4,7 @@ import { UserService } from "../services/UserService";
 import { UserStore } from "../store/UserStore";
 import { GetUserRequestDTO } from "../services/dto/request/GetUserRequestDTO";
 import { ILecture } from "../../lecture/store/ILectureStore";
+import { UpdateUserRequestDTO } from "../services/dto/request/UpdateUserRequestDTO";
 
 export class UserDomainStore implements IUserDomainStore {
   constructor(
@@ -27,13 +28,29 @@ export class UserDomainStore implements IUserDomainStore {
     }
   }
 
+  async updateUser(
+    userId: string,
+    updateUserRequest: UpdateUserRequestDTO
+  ): Promise<IUser> {
+    try {
+      const updatedUser = await this.userService.updateUser(
+        userId,
+        updateUserRequest
+      );
+
+      return updatedUser;
+    } catch (err: any) {
+      return err.error;
+    }
+  }
+
   async getUserLectures(
     userId: any,
     setErrorMessage: any
   ): Promise<Partial<ILecture[]>> {
     try {
       const thisUserLectures = await this.userService.getUserLectures(userId);
-      
+
       this.setUserLectures(thisUserLectures);
 
       return thisUserLectures;
