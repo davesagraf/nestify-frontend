@@ -11,5 +11,6 @@ export interface IUserDomainStore {
     getAllUsers(setErrorMessage: any): Promise<GetUserRequestDTO[]>;
     getUserLectures(userId: any, setErrorMessage: any): Promise<Partial<ILecture[]>>;
     updateUser(userId: string, updateUserRequest: UpdateUserRequestDTO ): Promise<IUser>;
+    deleteUser(userId: string, setErrorMessage: any): Promise<void>;
     readonly userService: UserService;
 }

@@ -19,14 +19,16 @@ import { useStores } from "../../StoreContext";
 import { toJS } from "mobx";
 import { UserRole } from "../../user/store/IUserStore";
 import { generateUUID } from "../../utils/uuid";
-import EditIcon from '@mui/icons-material/Edit';
-import DeleteIcon from '@mui/icons-material/Delete';
+import EditIcon from "@mui/icons-material/Edit";
+import DeleteIcon from "@mui/icons-material/Delete";
 import { EditUserForm } from "./EditUserForm";
+import { DeleteUserDialog } from "./DeleteUserDialog";
 
 export const UsersTable = observer(() => {
   const { userDomain, authDomain } = useStores();
   const [errorMessage, setErrorMessage] = useState<any>();
   const [editDialogOpen, setEditDialogOpen] = useState(false);
+  const [deleteDialogOpen, setDeleteDialogOpen] = useState(false);
   let user = toJS(userDomain.userStore.user);
 
   const navigate = useNavigate();
@@ -57,7 +59,7 @@ export const UsersTable = observer(() => {
       }
     }
     if (currentUser.role === UserRole.ADMIN) {
-        userDomain.getAllUsers(setErrorMessage);
+      userDomain.getAllUsers(setErrorMessage);
     }
   }, [currentUser.role]);
 
@@ -70,26 +72,47 @@ export const UsersTable = observer(() => {
   };
 
   const handleEditUser = async (event: React.MouseEvent<HTMLElement>) => {
-    await userDomain.getUserById(+event.currentTarget.id, setErrorMessage)
-    .then(() => {
-      setEditDialogOpen(true);
-    });
+    await userDomain
+      .getUserById(+event.currentTarget.id, setErrorMessage)
+      .then(() => {
+        handleOpenEditDialog();
+      });
   };
 
-  const handleDeleteUser = (event: React.MouseEvent<HTMLElement>) => {
-    console.log("delete user", +event.currentTarget.id);
-  }
+  const handleOpenDeleteDialog = () => {
+    setDeleteDialogOpen(true);
+  };
+
+  const handleCloseDeleteDialog = () => {
+    setDeleteDialogOpen(false);
+  };
+
+  const handleDeleteUser = async (event: React.MouseEvent<HTMLElement>) => {
+    await userDomain
+      .getUserById(+event.currentTarget.id, setErrorMessage)
+      .then(() => {
+        handleOpenDeleteDialog();
+      });
+  };
 
   return (
     <>
       {currentUser.role === UserRole.ADMIN ? (
         <>
-        {editDialogOpen ? (
-        <EditUserForm 
-        editDialogOpen={editDialogOpen}
-        handleCloseEditDialog={handleCloseEditDialog}
-        user={user}
-        /> ) : null }
+          {editDialogOpen ? (
+            <EditUserForm
+              editDialogOpen={editDialogOpen}
+              handleCloseEditDialog={handleCloseEditDialog}
+              user={user}
+            />
+          ) : null}
+          {deleteDialogOpen ? (
+            <DeleteUserDialog
+              deleteDialogOpen={deleteDialogOpen}
+              handleCloseDeleteDialog={handleCloseDeleteDialog}
+              user={user}
+            />
+          ) : null}
           <TableContainer component={Paper}>
             <Table sx={{ minWidth: 1512 }} aria-label="simple table">
               <TableHead>
@@ -122,24 +145,24 @@ export const UsersTable = observer(() => {
                     <TableCell align="center">{user.email}</TableCell>
                     <TableCell align="center">{user.role}</TableCell>
                     <TableCell align="center">
-                    <IconButton
-                      key={generateUUID()}
-                      id={`${user.id}`}
-                      edge="end"
-                      aria-label="edit"
-                      onClick={handleEditUser}>
-                      <EditIcon key={generateUUID()} />
-                    </IconButton>
+                      <IconButton
+                        key={generateUUID()}
+                        id={`${user.id}`}
+                        edge="end"
+                        aria-label="edit"
+                        onClick={handleEditUser}>
+                        <EditIcon key={generateUUID()} />
+                      </IconButton>
                     </TableCell>
                     <TableCell align="center">
-                    <IconButton
-                      key={generateUUID()}
-                      id={`${user.id}`}
-                      edge="end"
-                      aria-label="delete"
-                      onClick={handleDeleteUser}>
-                      <DeleteIcon key={generateUUID()} />
-                    </IconButton>
+                      <IconButton
+                        key={generateUUID()}
+                        id={`${user.id}`}
+                        edge="end"
+                        aria-label="delete"
+                        onClick={handleDeleteUser}>
+                        <DeleteIcon key={generateUUID()} />
+                      </IconButton>
                     </TableCell>
                   </TableRow>
                 ))}

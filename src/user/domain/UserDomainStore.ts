@@ -44,6 +44,17 @@ export class UserDomainStore implements IUserDomainStore {
     }
   }
 
+  async deleteUser(userId: string, setErrorMessage: any): Promise<void> {
+    try {
+      const newUserList = await this.userService.deleteUser(userId);
+      this.setUsers(newUserList);
+      return newUserList;
+    } catch (err: any) {
+      setErrorMessage(err.error)
+      return err.error;
+    }
+  }
+
   async getUserLectures(
     userId: any,
     setErrorMessage: any
