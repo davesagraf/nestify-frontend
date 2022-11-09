@@ -1,7 +1,7 @@
 import React from "react";
 import { UserDomainStore } from "./user/domain/UserDomainStore";
 import { AuthDomainStore } from "./auth/domain/AuthDomainStore";
-import { configure, makeAutoObservable } from "mobx";
+import { configure, makeAutoObservable, onReactionError } from "mobx";
 import { LectureDomainStore } from "./lecture/domain/LectureDomainStore";
 import { ErrorDomainStore } from "./error/domain/ErrorDomainStore";
 
@@ -15,6 +15,9 @@ class RootStore {
     makeAutoObservable(this);
     configure({
       enforceActions: "never",
+    });
+    onReactionError((error, _reaction) => {
+      this.errorDomain.handleError(error);
     });
   };
 };
