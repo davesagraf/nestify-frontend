@@ -5,7 +5,7 @@ import { GetUserRequestDTO } from "./dto/request/GetUserRequestDTO";
 import { UpdateUserRequestDTO } from "./dto/request/UpdateUserRequestDTO";
 
 export class UserService {
-  async getUserById(userId: string): Promise<GetUserRequestDTO> {
+  async getUserById(userId: string): Promise<IUser> {
     const jwtToken = localStorage.getItem("access_token");
     const response = await fetch(`${API_URL}/users/${userId}`, {
       method: "GET",
@@ -78,7 +78,7 @@ export class UserService {
     return parsedResponse;
   }
 
-  async getAllUsers(): Promise<GetUserRequestDTO[]> {
+  async getAllUsers(): Promise<IUser[]> {
     const jwtToken = localStorage.getItem("access_token");
     const response = await fetch(`${API_URL}/users`, {
       method: "GET",
@@ -96,7 +96,7 @@ export class UserService {
     return parsedResponse;
   }
 
-  async getUserProfile(): Promise<GetUserRequestDTO> {
+  async getUserProfile(): Promise<IUser> {
     const jwtToken = localStorage.getItem("access_token");
     const response = await fetch(`${API_URL}/profile`, {
       method: "GET",

@@ -12,6 +12,7 @@ import {
 import { useStores } from "../../StoreContext";
 import { observer } from "mobx-react-lite";
 import { ILecture } from "../store/ILectureStore";
+import { IError } from "../../error/store/IErrorStore";
 
 export const DeleteLectureDialog: React.FC<{
   deleteDialogOpen: boolean;
@@ -20,7 +21,7 @@ export const DeleteLectureDialog: React.FC<{
 }> = observer(({ deleteDialogOpen, handleCloseDeleteDialog, lecture }) => {
   const { lectureDomain } = useStores();
 
-  const [errorMessage, setErrorMessage] = useState<string>("");
+  const [error, setError] = useState<IError>();
 
   const deApplyUsers = {
     lectureId: lecture.id,
@@ -30,9 +31,9 @@ export const DeleteLectureDialog: React.FC<{
   const handleSaveDeleteLecture = async (
     event: React.MouseEvent<HTMLElement>
   ) => {
-    await lectureDomain.applyLecture(deApplyUsers, setErrorMessage);
-    await lectureDomain.deleteLecture(`${lecture.id}`, setErrorMessage);
-    await lectureDomain.getLectures(setErrorMessage);
+    await lectureDomain.applyLecture(deApplyUsers, setError);
+    await lectureDomain.deleteLecture(`${lecture.id}`, setError);
+    await lectureDomain.getLectures(setError);
     handleCloseDeleteDialog(event);
   };
 

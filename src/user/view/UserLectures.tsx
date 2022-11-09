@@ -18,11 +18,12 @@ import { useStores } from "../../StoreContext";
 import { toJS } from "mobx";
 import { UserRole } from "../../user/store/IUserStore";
 import { generateUUID } from "../../utils/uuid";
+import { IError } from "../../error/store/IErrorStore";
 
 export const UserLectures = observer(() => {
   const { id } = useParams();
   const { userDomain, authDomain } = useStores();
-  const [errorMessage, setErrorMessage] = useState<string>("");
+  const [error, setError] = useState<IError>();
   const navigate = useNavigate();
   const location = useLocation();
   const userId = id;
@@ -53,7 +54,7 @@ export const UserLectures = observer(() => {
       }
     }
     if (currentUser.role === UserRole.ADMIN) {
-      userDomain.getUserLectures(userId, setErrorMessage);
+      userDomain.getUserLectures(userId, setError);
     }
   }, [currentUser.role]);
 

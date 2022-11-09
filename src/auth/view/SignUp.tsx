@@ -3,6 +3,7 @@ import { useLocation, useNavigate } from "react-router-dom";
 import { Button, Dialog, Grid, TextField, Typography } from "@mui/material";
 import { observer } from "mobx-react-lite";
 import { SignUpRequestDTO } from "../services/dto/request/SignUpRequestDTO";
+import { IError } from "../../error/store/IErrorStore";
 
 export const SignUp = observer(({ authDomain }: any) => {
   const [userData, setUserData] = useState<SignUpRequestDTO>({
@@ -11,8 +12,7 @@ export const SignUp = observer(({ authDomain }: any) => {
     email: "",
     password: "",
   });
-  const [errorMessage, setErrorMessage] = useState<string>("");
-  const [errorStatus, setErrorStatus] = useState<null>(null);
+  const [error, setError] = useState<IError>();
 
   const navigate = useNavigate();
   const location = useLocation();
@@ -118,7 +118,7 @@ export const SignUp = observer(({ authDomain }: any) => {
                   sx={{ width: 150, height: 50 }}
                   onClick={() => {
                     authDomain
-                      .signup(userData, setErrorMessage, setErrorStatus)
+                      .signup(userData, setError)
                       .then(() => {
                         if (!authDomain.authStore.userExists) {
                           navigate("/login");
@@ -129,9 +129,9 @@ export const SignUp = observer(({ authDomain }: any) => {
                 </Button>
               </Grid>
               <Grid item sx={{ width: 304, height: 50, m: 2 }}>
-                {errorMessage ? (
+                {error ? (
                   <Typography component="p" variant="inherit" color="red">
-                    {`oops...it's ${errorStatus}, baby, looks like ${errorMessage}`}
+                    {`oops...it's ${error.status}, baby, looks like ${error.error}`}
                   </Typography>
                 ) : null}
               </Grid>

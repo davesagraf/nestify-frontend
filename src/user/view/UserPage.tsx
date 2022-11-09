@@ -12,11 +12,12 @@ import {
 import { observer } from "mobx-react-lite";
 import { toJS } from "mobx";
 import { useStores } from "../../StoreContext";
+import { IError } from "../../error/store/IErrorStore";
 
 export const UserPage = observer(() => {
   const { id } = useParams();
   const { userDomain, authDomain } = useStores();
-  const [errorMessage, setErrorMessage] = useState<string>();
+  const [error, setError] = useState<IError>();
   const navigate = useNavigate();
 
   const currentUser = toJS(authDomain.authStore.currentUser);
@@ -24,7 +25,7 @@ export const UserPage = observer(() => {
   let user = toJS(userDomain.userStore.user);
 
   useEffect(() => {
-    userDomain.getUserById(id, setErrorMessage);
+    userDomain.getUserById(id, setError);
   }, [user.id]);
 
   return (

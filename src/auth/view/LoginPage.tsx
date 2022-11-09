@@ -3,9 +3,10 @@ import { useNavigate, useLocation } from "react-router-dom";
 import { Button, Dialog, Grid, TextField, Typography } from "@mui/material";
 import { observer } from "mobx-react-lite";
 import { LoginRequestDTO } from "../services/dto/request/LoginRequestDTO";
+import { IError } from "../../error/store/IErrorStore";
 
 export const LoginPage = observer(({ authDomain }: any) => {
-  const [errorMessage, setErrorMessage] = useState<string>("");
+  const [error, setError] = useState<IError>();
   const [userData, setUserData] = useState<LoginRequestDTO>({
     email: "",
     password: "",
@@ -75,7 +76,7 @@ export const LoginPage = observer(({ authDomain }: any) => {
                   variant="outlined"
                   sx={{ width: 100, height: 50 }}
                   onClick={() => {
-                    authDomain.login(userData, setErrorMessage).then(() => {
+                    authDomain.login(userData, setError).then(() => {
                       if (authDomain.authStore.authenticated === true) {
                         navigate(from, { replace: true });
                       }
@@ -90,7 +91,7 @@ export const LoginPage = observer(({ authDomain }: any) => {
                   component="p"
                   variant="inherit"
                   color="red">
-                  {errorMessage}
+                  {error?.error}
                 </Typography>
               </Grid>
             </Dialog>

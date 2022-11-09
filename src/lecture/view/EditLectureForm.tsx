@@ -1,6 +1,5 @@
 import React, {
   EventHandler,
-  SetStateAction,
   useEffect,
   useState,
 } from "react";
@@ -16,40 +15,36 @@ import {
   Grid,
   TextField,
 } from "@mui/material";
-import { UpdateLectureRequestDTO } from "../services/dto/request/UpdateLectureRequestDTO";
 import { useStores } from "../../StoreContext";
 import { ILecture } from "../store/ILectureStore";
 import { faker } from "@faker-js/faker";
 import { observer } from "mobx-react-lite";
-import { toJS } from "mobx";
+import { IError } from "../../error/store/IErrorStore";
 
 const linkOptions = [...new Array(7)].map(() => faker.internet.url());
 
 export const EditLectureForm: React.FC<{
   editDialogOpen: boolean;
   handleCloseEditDialog: EventHandler<any>;
-  editLectureData: UpdateLectureRequestDTO;
-  setEditLectureData: SetStateAction<any>;
+  editLectureData: ILecture;
   lecture: ILecture;
 }> = observer(({
   editDialogOpen,
   handleCloseEditDialog,
   editLectureData,
-  setEditLectureData,
   lecture,
 }) => {
   const { lectureDomain } = useStores();
-
   const [title, setTitle] = useState(lecture.title);
   const [content, setContent] = useState(lecture.content);
   const [theme, setTheme] = useState(lecture.data.theme);
   const [image, setImage] = useState(lecture.data.image);
   let previousLinks = lecture.data.links.toString().split(", ")
   const [linkOption, setLinkOption] = useState<string[]>(linkOptions.concat(previousLinks));
-  const [errorMessage, setErrorMessage] = useState<string>("");
+  const [error, setError] = useState<IError>();
 
   useEffect(() => {
-    setEditLectureData({
+    lectureDomain.setLecture({
       ...editLectureData,
       data: { ...editLectureData.data, links: linkOption },
     });
@@ -58,19 +53,19 @@ export const EditLectureForm: React.FC<{
   const handleTitleChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     event.preventDefault();
     setTitle(event.target.value);
-    setEditLectureData({ ...editLectureData, title: event.target.value });
+    lectureDomain.setLecture({ ...editLectureData, title: event.target.value })
   };
 
   const handleContentChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     event.preventDefault();
     setContent(event.target.value);
-    setEditLectureData({ ...editLectureData, content: event.target.value });
+    lectureDomain.setLecture({ ...editLectureData, content: event.target.value });
   };
 
   const handleThemeChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     event.preventDefault();
     setTheme(event.target.value);
-    setEditLectureData({
+    lectureDomain.setLecture({
       ...editLectureData,
       data: { ...editLectureData.data, theme: event.target.value },
     });
@@ -81,7 +76,7 @@ export const EditLectureForm: React.FC<{
     values: string[]
   ) => {
     event.preventDefault();
-    setEditLectureData({
+    lectureDomain.setLecture({
       ...editLectureData,
       data: {
         ...editLectureData.data,
@@ -94,10 +89,10 @@ export const EditLectureForm: React.FC<{
     event.persist();
     if (event.currentTarget.files !== null) {
       for (const file of event.currentTarget.files) {
-        setEditLectureData({
+        lectureDomain.setLecture({
           ...editLectureData,
           data: { ...editLectureData.data, image: file.name },
-        });
+        })
       }
     }
   };
@@ -106,9 +101,9 @@ export const EditLectureForm: React.FC<{
     await lectureDomain.updateLecture(
     `${lecture.id}`,
      editLectureData,
-     setErrorMessage
+     setError
     );
-    await lectureDomain.getLectures(setErrorMessage);
+    await lectureDomain.getLectures(setError);
     handleCloseEditDialog(event);
   };
 

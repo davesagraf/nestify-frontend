@@ -12,6 +12,7 @@ import {
 import { useStores } from "../../StoreContext";
 import { observer } from "mobx-react-lite";
 import { IUser } from "../store/IUserStore";
+import { IError } from "../../error/store/IErrorStore";
 
 export const DeleteUserDialog: React.FC<{
   deleteDialogOpen: boolean;
@@ -19,12 +20,11 @@ export const DeleteUserDialog: React.FC<{
   user: IUser;
 }> = observer(({ deleteDialogOpen, handleCloseDeleteDialog, user }) => {
   const { userDomain } = useStores();
-
-  const [errorMessage, setErrorMessage] = useState<string>("");
+  const [error, setError] = useState<IError>();
 
   const handleSaveDeleteUser = async (event: React.MouseEvent<HTMLElement>) => {
-    await userDomain.deleteUser(`${user.id}`, setErrorMessage);
-    await userDomain.getAllUsers(setErrorMessage);
+    await userDomain.deleteUser(`${user.id}`, setError);
+    await userDomain.getAllUsers(setError);
     handleCloseDeleteDialog(event);
   };
 

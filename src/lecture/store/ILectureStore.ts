@@ -3,7 +3,7 @@ import { IUser, IUserStore } from "../../user/store/IUserStore";
 export interface ILectureData {
   image: string;
   theme: string;
-  links: string[];
+  links: string[] | string;
 }
 
 export interface ILecture {
@@ -13,11 +13,12 @@ export interface ILecture {
   title: string;
   content: string;
   data: ILectureData;
-  users: IUserStore[];
+  users: IUser[];
 }
 
 export interface ILectureStore {
   lectures: ILecture[];
   lecture: ILecture;
   lectureUsers: IUser[];
+  emptyLecture: ILecture;
 }

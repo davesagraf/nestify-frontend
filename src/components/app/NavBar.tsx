@@ -1,10 +1,9 @@
-import { useLocation, useNavigate } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 import { Button, Grid } from "@mui/material";
 import ArrowBackIcon from "@mui/icons-material/ArrowBack";
 import ArrowForwardIcon from "@mui/icons-material/ArrowForward";
 
 export const NavBar = () => {
-  const location = useLocation();
   const navigate = useNavigate();
   return (
     <>

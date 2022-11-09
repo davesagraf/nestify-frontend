@@ -5,95 +5,72 @@ import { LectureService } from "../services/LectureService";
 import { GetLectureRequestDTO } from "../services/dto/request/GetLectureRequestDTO";
 import { IUser } from "../../user/store/IUserStore";
 import { ApplyLectureRequestDTO } from "../services/dto/request/ApplyLectureRequestDTO";
-import { CreateLectureRequestDTO } from "../services/dto/request/CreateLectureRequestDTO";
-import { UpdateLectureRequestDTO } from "../services/dto/request/UpdateLectureRequestDTO";
+import { tryCatchWrap } from "../../utils/tryCatchWrap";
 
 export class LectureDomainStore implements ILectureDomainStore {
   constructor(
     public lectureStore: ILectureStore = new LectureStore(),
     readonly lectureService: LectureService = new LectureService()
   ) {}
-  async getLectures(setErrorMessage: any): Promise<GetLectureRequestDTO[]> {
-    try {
+  
+  async getLectures(setError: any): Promise<GetLectureRequestDTO[]> {
+    return tryCatchWrap(async () => {
       const lectures = await this.lectureService.getLectures();
       this.setLectures(lectures);
       return lectures;
-    } catch (err: any) {
-      setErrorMessage(err.error);
-      return err.error;
-    }
-  }
+    }, setError)
+  };
 
-  async createLecture(createLectureRequest: CreateLectureRequestDTO, setErrorMessage: any): Promise<ILecture> {
-    try {
+  async createLecture(createLectureRequest: ILecture, setError: any): Promise<ILecture> {
+    return tryCatchWrap(async () => {
       const newLecture = await this.lectureService.createLecture(createLectureRequest);
       this.lectureStore.lectures.push(newLecture);
       return newLecture;
-    } catch (err: any) {
-      setErrorMessage(err.error);
-      return err.error;
-    }
+    }, setError)
   }
 
   async updateLecture(
     lectureId: string,
-    updateLectureRequest: UpdateLectureRequestDTO, 
-    setErrorMessage: any): Promise<ILecture> {
-    try {
+    updateLectureRequest: ILecture, 
+    setError: any): Promise<ILecture> {
+    return tryCatchWrap(async () => {
       const updatedLecture = await this.lectureService.updateLecture(
         lectureId,
         updateLectureRequest
       );
-
       return updatedLecture;
-    } catch (err: any) {
-      setErrorMessage(err.error);
-      return err.error;
-    }
+    }, setError)
   }
 
-  async deleteLecture(lectureId: string, setErrorMessage: any): Promise<void> {
-    try {
+  async deleteLecture(lectureId: string, setError: any): Promise<void> {
+    return tryCatchWrap(async () => {
       const newLectureList = await this.lectureService.deleteLecture(lectureId);
       this.setLectures(newLectureList);
       return newLectureList;
-    } catch (err: any) {
-      setErrorMessage(err.error)
-      return err.error;
-    }
+    }, setError)
   }
 
-  async getLectureUsers(lectureId: string, setErrorMessage: any): Promise<IUser[]> {
-    try {
+  async getLectureUsers(lectureId: string, setError: any): Promise<IUser[]> {
+    return tryCatchWrap(async () => {
       const lectureUsers = await this.lectureService.getLectureUsers(lectureId);
       this.setLectureUsers(lectureUsers);
       return lectureUsers;
-    } catch (err: any) {
-      setErrorMessage(err.error);
-      return err.error;
-    }
+    }, setError)
   }
 
-  async applyLecture(applyLectureRequest: ApplyLectureRequestDTO, setErrorMessage: any): Promise<IUser[]> {
-    try {
+  async applyLecture(applyLectureRequest: ApplyLectureRequestDTO, setError: any): Promise<IUser[]> {
+    return tryCatchWrap(async () => {
       const thisLectureUsers = await this.lectureService.applyLecture(applyLectureRequest);
-
       return thisLectureUsers;
-    } catch (err: any) {
-      setErrorMessage(err.error);
-      return err.error;
-    }
+    }, setError)
   }
 
-  async getLectureById(lectureId: any, setErrorMessage: any): Promise<GetLectureRequestDTO> {
-    try {
+  async getLectureById(lectureId: any, setError: any): Promise<GetLectureRequestDTO> {
+    return tryCatchWrap(async () => {
       const lecture = await this.lectureService.getLectureById(lectureId);
       this.setLecture(lecture);
-      return lecture;
-    } catch (err: any) {
-      setErrorMessage(err.error);
-      return err.error;
-    }
+      return lecture;   
+    }, setError)
   }
 
   private setLectures(lectures: any) {
@@ -104,7 +81,7 @@ export class LectureDomainStore implements ILectureDomainStore {
     this.lectureStore.lectureUsers = lectureUsers;
   }
 
-  private setLecture(lecture: ILecture) {
+  setLecture(lecture: ILecture) {
     this.lectureStore.lecture = lecture ;
   }
 }

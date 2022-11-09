@@ -15,6 +15,7 @@ import { useStores } from "../../StoreContext";
 import { observer } from "mobx-react-lite";
 import { toJS } from "mobx";
 import { ApplyLectureRequestDTO } from "../services/dto/request/ApplyLectureRequestDTO";
+import { IError } from "../../error/store/IErrorStore";
 
 const ITEM_HEIGHT = 48;
 const ITEM_PADDING_TOP = 8;
@@ -41,7 +42,7 @@ export const LectureUsers: React.FC<{
   setApplyData: any;
 }> = observer(({ applyData, setApplyData }) => {
   const theme = useTheme();
-  const [errorMessage, setErrorMessage] = useState<string>("");
+  const [error, setError] = useState<IError>();
   const { userDomain, lectureDomain } = useStores();
   let users = toJS(userDomain.userStore.users);
   let names = users.map((user) => user.firstName + " " + user.lastName);
@@ -50,7 +51,7 @@ export const LectureUsers: React.FC<{
   const [personName, setPersonName] = useState<string[]>(initialNames);
 
   useEffect(() => {
-    userDomain.getAllUsers(setErrorMessage);
+    userDomain.getAllUsers(setError);
   }, []);
 
   useEffect(() => {

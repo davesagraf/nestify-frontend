@@ -16,10 +16,23 @@ const lecture: ILecture = {
   users: []
 };
 
+const emptyLecture: ILecture = {
+  id: 0,
+  title: "",
+  content: "",
+  data: {
+    image: "",
+    links: [],
+    theme: "",
+  },
+  users: []
+};
+
 export class LectureStore {
   public lectures = lectures;
   public lecture = lecture;
   public lectureUsers = lectureUsers;
+  public emptyLecture = emptyLecture;
 
   constructor() {
     makeAutoObservable(this);

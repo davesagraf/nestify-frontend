@@ -22,34 +22,21 @@ import { UserRole } from "../../user/store/IUserStore";
 import { generateUUID } from "../../utils/uuid";
 import { CreateLectureForm } from "./CreateLectureForm";
 import { EditLectureForm } from "./EditLectureForm";
-import { CreateLectureRequestDTO } from "../services/dto/request/CreateLectureRequestDTO";
-import { UpdateLectureRequestDTO } from "../services/dto/request/UpdateLectureRequestDTO";
 import EditIcon from "@mui/icons-material/Edit";
 import DeleteIcon from "@mui/icons-material/Delete";
 import { DeleteLectureDialog } from "./DeleteLectureDialog";
+import { IError } from "../../error/store/IErrorStore";
 
 export const LecturesTable = observer(() => {
   const { lectureDomain, userDomain, authDomain } = useStores();
-  const [errorMessage, setErrorMessage] = useState<string>("");
+  const [error, setError] = useState<IError>();
   const [dialogOpen, setDialogOpen] = useState(false);
   const [editDialogOpen, setEditDialogOpen] = useState(false);
   const [deleteDialogOpen, setDeleteDialogOpen] = useState(false);
+
   let lecture = toJS(lectureDomain.lectureStore.lecture);
-  const [lectureData, setLectureData] = useState<CreateLectureRequestDTO>(lecture);
 
   let lectureUsers = toJS(lectureDomain.lectureStore.lectureUsers);
-
-  const [editLectureData, setEditLectureData] =
-    useState<UpdateLectureRequestDTO>({
-      title: lecture.title,
-      content: lecture.content,
-      data: {
-        image: lecture.data.image,
-        theme: lecture.data.theme,
-        links: lecture.data.links,
-      },
-      users: lectureUsers,
-    });
 
   const navigate = useNavigate();
 
@@ -78,7 +65,7 @@ export const LecturesTable = observer(() => {
       }
     }
     if (currentUser.role === UserRole.ADMIN) {
-      lectureDomain.getLectures(setErrorMessage);
+      lectureDomain.getLectures(setError);
     }
   }, [currentUser.role]);
 
@@ -87,16 +74,7 @@ export const LecturesTable = observer(() => {
   };
 
   const handleCloseDialog = () => {
-    setLectureData({
-      title: "",
-      content: "",
-      data: {
-        image: "",
-        theme: "",
-        links: [""],
-      },
-      users: [],
-    });
+    lectureDomain.setLecture(lectureDomain.lectureStore.emptyLecture);
     setDialogOpen(false);
   };
 
@@ -105,22 +83,13 @@ export const LecturesTable = observer(() => {
   };
 
   const handleCloseEditDialog = () => {
-    setEditLectureData({
-      title: "",
-      content: "",
-      data: {
-        image: "",
-        theme: "",
-        links: [""],
-      },
-    });
     setEditDialogOpen(false);
   };
 
   const handleEditLecture = async (event: React.MouseEvent<HTMLElement>) => {
-    lectureDomain.getLectureUsers(event.currentTarget.id, setErrorMessage);
+    lectureDomain.getLectureUsers(event.currentTarget.id, setError);
     await lectureDomain
-      .getLectureById(+event.currentTarget.id, setErrorMessage)
+      .getLectureById(+event.currentTarget.id, setError)
       .then(() => {
         handleOpenEditDialog();
       });
@@ -136,7 +105,7 @@ export const LecturesTable = observer(() => {
 
   const handleDeleteLecture = async (event: React.MouseEvent<HTMLElement>) => {
     await userDomain
-      .getUserById(+event.currentTarget.id, setErrorMessage)
+      .getUserById(+event.currentTarget.id, setError)
       .then(() => {
         handleOpenDeleteDialog();
       });
@@ -156,16 +125,14 @@ export const LecturesTable = observer(() => {
             <CreateLectureForm
               dialogOpen={dialogOpen}
               handleCloseDialog={handleCloseDialog}
-              lectureData={lectureData}
-              setLectureData={setLectureData}
+              lectureData={lecture}
             />
           ) : null}
           {editDialogOpen ? (
             <EditLectureForm
               editDialogOpen={editDialogOpen}
               handleCloseEditDialog={handleCloseEditDialog}
-              editLectureData={editLectureData}
-              setEditLectureData={setEditLectureData}
+              editLectureData={{...lecture, users: lectureUsers }}
               lecture={lecture}
             />
           ) : null}

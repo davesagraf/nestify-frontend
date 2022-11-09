@@ -22,11 +22,12 @@ import { LectureUsers } from "./LectureUsers";
 import { ApplyLectureRequestDTO } from "../services/dto/request/ApplyLectureRequestDTO";
 import { LectureUsersList } from "./LectureUsersList";
 import { generateUUID } from "../../utils/uuid";
+import { IError } from "../../error/store/IErrorStore";
 
 export const LecturePage = observer(() => {
   const { id } = useParams();
   const { lectureDomain } = useStores();
-  const [errorMessage, setErrorMessage] = useState<string>("");
+  const [error, setError] = useState<IError>();
   const [open, setOpen] = useState<boolean>(false);
   const [usersChanged, setUsersChanged] = useState<boolean>(false);
   let lectureId: number = parseInt(`${id}`, 10);
@@ -41,11 +42,11 @@ export const LecturePage = observer(() => {
   let lecture = toJS(lectureDomain.lectureStore.lecture);
 
   useEffect(() => {
-    lectureDomain.getLectureById(id, setErrorMessage);
+    lectureDomain.getLectureById(id, setError);
   }, []);
 
   useEffect(() => {
-    lectureDomain.getLectureUsers(`${id}`, setErrorMessage);
+    lectureDomain.getLectureUsers(`${id}`, setError);
     setUsersChanged(false);
   }, [usersChanged]);
 
@@ -91,7 +92,7 @@ export const LecturePage = observer(() => {
               cursor: "pointer",
             }}
             onClick={() => {
-              lectureDomain.applyLecture(applyData, setErrorMessage);
+              lectureDomain.applyLecture(applyData, setError);
               setUsersChanged(true);
               handleCloseDialog();
             }}>

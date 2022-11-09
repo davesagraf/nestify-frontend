@@ -6,7 +6,7 @@ import { SignUpRequestDTO } from "../services/dto/request/SignUpRequestDTO";
 export interface IAuthDomainStore {
     authStore: IAuthStore;
     logOut(): void;
-    login(loginRequest: LoginRequestDTO, setErrorMessage: any): Promise<void>;
-    signup(signUpRequest: SignUpRequestDTO, setErrorMessage: any, setErrorStatus: any): Promise<void>;
+    login(loginRequest: LoginRequestDTO, setError: any): Promise<void>;
+    signup(signUpRequest: SignUpRequestDTO, setError: any): Promise<void>;
     readonly authService: AuthService;
 };

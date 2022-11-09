@@ -8,12 +8,12 @@ import { ILecture, ILectureStore } from "../store/ILectureStore";
 
 export interface ILectureDomainStore {
     lectureStore: ILectureStore;
-    getLectures(setErrorMessage: any): Promise<GetLectureRequestDTO[]>;
-    getLectureById(lectureId: string, setErrorMessage: any): Promise<GetLectureRequestDTO>;
-    getLectureUsers(lectureId: string, setErrorMessage: any): Promise<IUser[]> ;
-    applyLecture(applyLectureRequest: ApplyLectureRequestDTO, setErrorMessage: any): Promise<IUser[]>;
-    createLecture(createLectureRequest: CreateLectureRequestDTO, setErrorMessage: any): Promise<ILecture>;
-    updateLecture(userId: string, updateLectureRequest: UpdateLectureRequestDTO, setErrorMessage: any): Promise<ILecture>;
-    deleteLecture(lectureId: string, setErrorMessage: any): Promise<void>;
+    getLectures(setError: any): Promise<GetLectureRequestDTO[]>;
+    getLectureById(lectureId: string, setError: any): Promise<GetLectureRequestDTO>;
+    getLectureUsers(lectureId: string, setError: any): Promise<IUser[]> ;
+    applyLecture(applyLectureRequest: ApplyLectureRequestDTO, setError: any): Promise<IUser[]>;
+    createLecture(createLectureRequest: ILecture, setError: any): Promise<ILecture>;
+    updateLecture(userId: string, updateLectureRequest: ILecture, setError: any): Promise<ILecture>;
+    deleteLecture(lectureId: string, setError: any): Promise<void>;
     readonly lectureService: LectureService;
 }

@@ -2,9 +2,7 @@ import { IUser } from "../../user/store/IUserStore";
 import { API_URL } from "../../utils/url";
 import { ILecture } from "../store/ILectureStore";
 import { ApplyLectureRequestDTO } from "./dto/request/ApplyLectureRequestDTO";
-import { CreateLectureRequestDTO } from "./dto/request/CreateLectureRequestDTO";
 import { GetLectureRequestDTO } from "./dto/request/GetLectureRequestDTO";
-import { UpdateLectureRequestDTO } from "./dto/request/UpdateLectureRequestDTO";
 
 export class LectureService {
   async getLectures(): Promise<GetLectureRequestDTO[]> {
@@ -83,7 +81,7 @@ export class LectureService {
   }
 
   async createLecture(
-    createLectureRequest: CreateLectureRequestDTO
+    createLectureRequest: ILecture
   ): Promise<ILecture> {
     const jwtToken = localStorage.getItem("access_token");
     const response = await fetch(`${API_URL}/lectures`, {
@@ -103,7 +101,7 @@ export class LectureService {
     return parsedResponse;
   }
 
-  async updateLecture(lectureId: string, updateLectureRequest: UpdateLectureRequestDTO): Promise<ILecture> {
+  async updateLecture(lectureId: string, updateLectureRequest: ILecture): Promise<ILecture> {
     const jwtToken = localStorage.getItem("access_token");
     const response = await fetch(`${API_URL}/lectures/${lectureId}`, {
       method: "PUT",

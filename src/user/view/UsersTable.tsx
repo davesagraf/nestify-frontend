@@ -23,10 +23,11 @@ import EditIcon from "@mui/icons-material/Edit";
 import DeleteIcon from "@mui/icons-material/Delete";
 import { EditUserForm } from "./EditUserForm";
 import { DeleteUserDialog } from "./DeleteUserDialog";
+import { IError } from "../../error/store/IErrorStore";
 
 export const UsersTable = observer(() => {
   const { userDomain, authDomain } = useStores();
-  const [errorMessage, setErrorMessage] = useState<any>();
+  const [error, setError] = useState<IError>();
   const [editDialogOpen, setEditDialogOpen] = useState(false);
   const [deleteDialogOpen, setDeleteDialogOpen] = useState(false);
   let user = toJS(userDomain.userStore.user);
@@ -59,7 +60,7 @@ export const UsersTable = observer(() => {
       }
     }
     if (currentUser.role === UserRole.ADMIN) {
-      userDomain.getAllUsers(setErrorMessage);
+      userDomain.getAllUsers(setError);
     }
   }, [currentUser.role]);
 
@@ -73,7 +74,7 @@ export const UsersTable = observer(() => {
 
   const handleEditUser = async (event: React.MouseEvent<HTMLElement>) => {
     await userDomain
-      .getUserById(+event.currentTarget.id, setErrorMessage)
+      .getUserById(+event.currentTarget.id, setError)
       .then(() => {
         handleOpenEditDialog();
       });
@@ -89,7 +90,7 @@ export const UsersTable = observer(() => {
 
   const handleDeleteUser = async (event: React.MouseEvent<HTMLElement>) => {
     await userDomain
-      .getUserById(+event.currentTarget.id, setErrorMessage)
+      .getUserById(+event.currentTarget.id, setError)
       .then(() => {
         handleOpenDeleteDialog();
       });

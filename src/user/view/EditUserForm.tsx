@@ -16,47 +16,42 @@ import {
 } from "@mui/material";
 import { useStores } from "../../StoreContext";
 import { observer } from "mobx-react-lite";
-import { UpdateUserRequestDTO } from "../services/dto/request/UpdateUserRequestDTO";
 import { IUser, UserRole } from "../store/IUserStore";
+import { IError } from "../../error/store/IErrorStore";
 
 export const EditUserForm: React.FC<{
   editDialogOpen: boolean;
   handleCloseEditDialog: EventHandler<any>;
   user: IUser;
 }> = observer(({ editDialogOpen, handleCloseEditDialog, user }) => {
-  const [editUserData, setEditUserData] = useState<UpdateUserRequestDTO>({
-    firstName: user.firstName,
-    lastName: user.lastName,
-    role: user.role,
-  });
 
   const { userDomain } = useStores();
 
-  const [firstName, setFirstName] = useState<string>(editUserData.firstName);
-  const [lastName, setLastName] = useState<string>(editUserData.lastName);
-  const [role, setRole] = useState<UserRole>(editUserData.role);
-  const [errorMessage, setErrorMessage] = useState<string>("");
+  const [firstName, setFirstName] = useState<string>(user.firstName);
+  const [lastName, setLastName] = useState<string>(user.lastName);
+  const [role, setRole] = useState<UserRole>(user.role);
+  const [error, setError] = useState<IError>();
 
   const handleFirstNameChange = (
     event: React.ChangeEvent<HTMLInputElement>
   ) => {
     setFirstName(event.target.value);
-    setEditUserData({ ...editUserData, firstName: event.target.value });
+    userDomain.setUser({ ...user, firstName: event.target.value });
   };
 
   const handleLastNameChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     setLastName(event.target.value);
-    setEditUserData({ ...editUserData, lastName: event.target.value });
+    userDomain.setUser({ ...user, lastName: event.target.value });
   };
 
   const handleRoleChange = (event: SelectChangeEvent) => {
     setRole(event.target.value as any);
-    setEditUserData({ ...editUserData, role: event.target.value as any });
+    userDomain.setUser({ ...user, role: event.target.value as any });
   };
 
   const handleSaveEditUser = async (event: React.MouseEvent<HTMLElement>) => {
-    await userDomain.updateUser(`${user.id}`, editUserData);
-    await userDomain.getAllUsers(setErrorMessage);
+    await userDomain.updateUser(`${user.id}`, user, setError);
+    await userDomain.getAllUsers(setError);
     handleCloseEditDialog(event);
   };
 

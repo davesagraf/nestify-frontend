@@ -1,4 +1,5 @@
 import { IUser } from "../../user/store/IUserStore";
+import { tryCatchWrap } from "../../utils/tryCatchWrap";
 import { AuthService } from "../services/AuthService";
 import { LoginRequestDTO } from "../services/dto/request/LoginRequestDTO";
 import { SignUpRequestDTO } from "../services/dto/request/SignUpRequestDTO";
@@ -13,8 +14,8 @@ export class AuthDomainStore implements IAuthDomainStore {
     this.authStore.authenticated = !!this.getAccessToken();
   }
 
-  async login(loginRequest: LoginRequestDTO, setErrorMessage: any) {
-    try {
+  async login(loginRequest: LoginRequestDTO, setError: any) {
+   tryCatchWrap(async () => {
       const response: any = await this.authService.login(loginRequest);
       localStorage.setItem("access_token", response.access_token);
       
@@ -22,19 +23,18 @@ export class AuthDomainStore implements IAuthDomainStore {
       this.setCurrentUser(response.user);
 
       return response.user;
-    } catch (err: any) {
-      setErrorMessage(err.error);
-    }
+    }, 
+    setError)
   }
 
-  async signup(signUpRequest: SignUpRequestDTO, setErrorMessage: any, setErrorStatus: any) {
-    try {
-      await this.authService.signup(signUpRequest);
+  async signup(signUpRequest: SignUpRequestDTO, setError: any) {
+    tryCatchWrap(async () => {
+      const response: any = await this.authService.signup(signUpRequest);
       this.setUserExists(false);
-    } catch (err: any) {
+      return response;
+    }, setError)
+    if (setError) {
       this.setUserExists(true);
-      setErrorMessage(err.error);
-      setErrorStatus(err.status);
     }
   }
 

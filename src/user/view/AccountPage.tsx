@@ -3,14 +3,15 @@ import { useNavigate } from "react-router-dom";
 import { Grid, Link, Typography } from "@mui/material";
 import { observer } from "mobx-react-lite";
 import { useStores } from "../../StoreContext";
+import { IError } from "../../error/store/IErrorStore";
 
 export const AccountPage = observer(() => {
   const {userDomain} = useStores();
   const user = userDomain.userStore.initialUser;
-  const [errorMessage, setErrorMessage] = useState<string>();
+  const [error, setError] = useState<IError>();
   const navigate = useNavigate();
   useEffect(() => {
-    userDomain.getUserProfile(setErrorMessage);
+    userDomain.getUserProfile(setError);
   }, [])
   return (
     <>

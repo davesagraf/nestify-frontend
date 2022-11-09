@@ -5,6 +5,7 @@ import { UserStore } from "../store/UserStore";
 import { GetUserRequestDTO } from "../services/dto/request/GetUserRequestDTO";
 import { ILecture } from "../../lecture/store/ILectureStore";
 import { UpdateUserRequestDTO } from "../services/dto/request/UpdateUserRequestDTO";
+import { tryCatchWrap } from "../../utils/tryCatchWrap";
 
 export class UserDomainStore implements IUserDomainStore {
   constructor(
@@ -14,85 +15,68 @@ export class UserDomainStore implements IUserDomainStore {
 
   async getUserById(
     userId: any,
-    setErrorMessage: any
-  ): Promise<GetUserRequestDTO> {
-    try {
+    setError: any
+  ): Promise<IUser> {
+    return tryCatchWrap(async () => {
       const user = await this.userService.getUserById(userId);
 
       this.setUser(user);
 
       return user;
-    } catch (err: any) {
-      setErrorMessage(err.error);
-      return err.error;
-    }
+  }, setError)
   }
 
   async updateUser(
     userId: string,
-    updateUserRequest: UpdateUserRequestDTO
+    updateUserRequest: UpdateUserRequestDTO,
+    setError: any
   ): Promise<IUser> {
-    try {
+    return tryCatchWrap(async () => {
       const updatedUser = await this.userService.updateUser(
         userId,
         updateUserRequest
       );
-
       return updatedUser;
-    } catch (err: any) {
-      return err.error;
-    }
+  }, setError)
   }
 
-  async deleteUser(userId: string, setErrorMessage: any): Promise<void> {
-    try {
+  async deleteUser(userId: string, setError: any): Promise<void> {
+    return tryCatchWrap(async () => {
       const newUserList = await this.userService.deleteUser(userId);
       this.setUsers(newUserList);
       return newUserList;
-    } catch (err: any) {
-      setErrorMessage(err.error)
-      return err.error;
-    }
+    }, setError)
   }
 
   async getUserLectures(
     userId: any,
-    setErrorMessage: any
+    setError: any
   ): Promise<Partial<ILecture[]>> {
-    try {
+    return tryCatchWrap(async () => {
       const thisUserLectures = await this.userService.getUserLectures(userId);
 
       this.setUserLectures(thisUserLectures);
 
       return thisUserLectures;
-    } catch (err: any) {
-      setErrorMessage(err.error);
-      return err.error;
-    }
+  }, setError)
   }
 
-  async getUserProfile(setErrorMessage: any): Promise<GetUserRequestDTO> {
-    try {
+  async getUserProfile(setError: any): Promise<IUser> {
+    return tryCatchWrap(async () => {
       const user = await this.userService.getUserProfile();
 
       this.setInitialUser(user);
 
       return user;
-    } catch (err: any) {
-      setErrorMessage(err.error);
-      return err.error;
-    }
+    }, setError)
   }
 
-  async getAllUsers(setErrorMessage: any): Promise<GetUserRequestDTO[]> {
-    try {
+  async getAllUsers(setError: any): Promise<IUser[]> {
+    return tryCatchWrap(async () => {
       const users = await this.userService.getAllUsers();
       this.setUsers(users);
       return users;
-    } catch (err: any) {
-      setErrorMessage(err.error);
-      return err;
-    }
+    }, setError)
   }
 
   private setInitialUser(initialUser: any) {
@@ -107,7 +91,7 @@ export class UserDomainStore implements IUserDomainStore {
     this.userStore.userLectures = lectures;
   }
 
-  private setUser(user: any) {
+  setUser(user: IUser) {
     this.userStore.user = user;
   }
 }

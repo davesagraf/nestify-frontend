@@ -20,6 +20,7 @@ import { observer } from "mobx-react-lite";
 import { toJS } from "mobx";
 import { useStores } from "../../StoreContext";
 import { generateUUID } from "../../utils/uuid";
+import { IError } from "../../error/store/IErrorStore";
 
 export const LectureUsersList: React.FC<{
   usersChanged: boolean;
@@ -27,13 +28,13 @@ export const LectureUsersList: React.FC<{
 }> = observer(({ usersChanged, setUsersChanged }) => {
   const { id } = useParams();
   const { lectureDomain } = useStores();
-  const [errorMessage, setErrorMessage] = useState<string>("");
+  const [error, setError] = useState<IError>();
   let lectureId: number = parseInt(`${id}`, 10);
 
   let lectureUsers = toJS(lectureDomain.lectureStore.lectureUsers);
 
   useEffect(() => {
-    lectureDomain.getLectureUsers(`${id}`, setErrorMessage);
+    lectureDomain.getLectureUsers(`${id}`, setError);
   }, []);
   const [openSnackbar, setOpenSnackbar] = useState(false);
 
@@ -72,7 +73,7 @@ export const LectureUsersList: React.FC<{
 
     lectureDomain.applyLecture(
       { lectureId: lectureId, userIds: appliedUserIds },
-      setErrorMessage
+      setError
     );
     setUsersChanged(true);
     handleOpenSnackbar();

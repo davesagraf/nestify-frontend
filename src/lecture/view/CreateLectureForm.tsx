@@ -1,6 +1,5 @@
 import React, {
   EventHandler,
-  SetStateAction,
   useEffect,
   useState,
 } from "react";
@@ -15,21 +14,23 @@ import {
   Grid,
   TextField,
 } from "@mui/material";
-import { CreateLectureRequestDTO } from "../services/dto/request/CreateLectureRequestDTO";
 import { useStores } from "../../StoreContext";
 import { faker } from "@faker-js/faker";
+import { ILecture } from "../store/ILectureStore";
+import { IError } from "../../error/store/IErrorStore";
 
 const linkOptions = [...new Array(7)].map(() => faker.internet.url());
 
 export const CreateLectureForm: React.FC<{
   dialogOpen: boolean;
   handleCloseDialog: EventHandler<any>;
-  lectureData: CreateLectureRequestDTO;
-  setLectureData: SetStateAction<any>;
-}> = ({ dialogOpen, handleCloseDialog, lectureData, setLectureData }) => {
+  lectureData: ILecture;
+}> = ({ dialogOpen, handleCloseDialog, lectureData }) => {
   const { lectureDomain } = useStores();
 
-  const [errorMessage, setErrorMessage] = useState<string>("");
+  const setLectureData = (data: ILecture) => lectureDomain.setLecture(data)
+
+  const [error, setError] = useState<IError>();
   const [linkOption, setLinkOption] = useState<string[]>(linkOptions);
 
   useEffect(() => {
@@ -85,10 +86,10 @@ export const CreateLectureForm: React.FC<{
   };
 
   const handleCreateLecture = (event: React.MouseEvent<HTMLElement>) => {
-    lectureDomain.createLecture(lectureData, setErrorMessage);
+    lectureDomain.createLecture(lectureData, setError);
     handleCloseDialog(event);
   };
-
+  
   return (
     <>
       <Dialog PaperProps={

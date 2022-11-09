@@ -1,4 +1,4 @@
-import { IUserStore } from "../../../../user/store/IUserStore";
+import { IUserStore, IUser } from "../../../../user/store/IUserStore";
 import { ILectureData } from "../../../store/ILectureStore";
 
 export interface GetLectureRequestDTO  {
@@ -8,5 +8,5 @@ export interface GetLectureRequestDTO  {
     readonly title: string;
     readonly content: string;
     readonly data: ILectureData;
-    readonly users: IUserStore[];
+    readonly users: IUser[];
 }

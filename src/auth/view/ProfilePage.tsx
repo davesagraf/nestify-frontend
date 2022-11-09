@@ -5,13 +5,14 @@ import { observer } from "mobx-react-lite";
 import { useStores } from "../../StoreContext";
 import { IdleTimer } from "../../utils/IdleTimer";
 import { generateUUID } from "../../utils/uuid";
+import { IError } from "../../error/store/IErrorStore";
 
 export const ProfilePage = observer(() => {
   const { authDomain, userDomain } = useStores();
   const user  = userDomain.userStore.initialUser;
   const location = useLocation();
   const navigate = useNavigate();
-  const [errorMessage, setErrorMessage] = useState<string>("");
+  const [error, setError] = useState<IError>();
 
   const [counter, setCounter] = useState(30);
   const [isTimeout, setIsTimeout] = useState(false);
@@ -43,7 +44,7 @@ export const ProfilePage = observer(() => {
 
   useEffect(() => {
     if (location.pathname === "/profile") {
-      userDomain.getUserProfile(setErrorMessage);
+      userDomain.getUserProfile(setError);
     }
   }, []);
 
@@ -147,11 +148,6 @@ export const ProfilePage = observer(() => {
                     {lecture.data.links}
                   </Typography>
                     </Grid>
-                    {/* {lecture.data.links.map((link) => (
-                      <Grid key={generateUUID()} item sx={{ width: 1512, height: 25 }}>
-                        {link}
-                      </Grid>
-                    ))} */}
                     <Grid item sx={{ width: 1512, height: 30 }}>
                       {lecture.data.theme}
                     </Grid>
@@ -166,7 +162,7 @@ export const ProfilePage = observer(() => {
               color: "red",
               fontSize: 18,
             }}>
-            {errorMessage}
+            {error?.error}
           </Typography>
         </>
       </Grid>
