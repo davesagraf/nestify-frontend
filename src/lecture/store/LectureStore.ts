@@ -2,10 +2,6 @@ import { configure, makeAutoObservable } from "mobx";
 import { IUser } from "../../user/store/IUserStore";
 import { ILecture } from "./ILectureStore";
 
-configure({
-  enforceActions: "never",
-})
-
 const lectureUsers: IUser[] = [];
 const lectures: ILecture[] = [];
 const lecture: ILecture = {
@@ -27,5 +23,8 @@ export class LectureStore {
 
   constructor() {
     makeAutoObservable(this);
-  }
-}
+    configure({
+      enforceActions: "never",
+    });
+  };
+};

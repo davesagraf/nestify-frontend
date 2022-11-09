@@ -34,18 +34,9 @@ export const LecturesTable = observer(() => {
   const [dialogOpen, setDialogOpen] = useState(false);
   const [editDialogOpen, setEditDialogOpen] = useState(false);
   const [deleteDialogOpen, setDeleteDialogOpen] = useState(false);
-  const [lectureData, setLectureData] = useState<CreateLectureRequestDTO>({
-    title: "",
-    content: "",
-    data: {
-      image: "",
-      theme: "",
-      links: [""],
-    },
-    users: [],
-  });
-
   let lecture = toJS(lectureDomain.lectureStore.lecture);
+  const [lectureData, setLectureData] = useState<CreateLectureRequestDTO>(lecture);
+
   let lectureUsers = toJS(lectureDomain.lectureStore.lectureUsers);
 
   const [editLectureData, setEditLectureData] =

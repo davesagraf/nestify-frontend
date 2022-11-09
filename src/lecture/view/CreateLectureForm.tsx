@@ -19,15 +19,7 @@ import { CreateLectureRequestDTO } from "../services/dto/request/CreateLectureRe
 import { useStores } from "../../StoreContext";
 import { faker } from "@faker-js/faker";
 
-let linkOptions = [
-  faker.internet.url(),
-  faker.internet.url(),
-  faker.internet.url(),
-  faker.internet.url(),
-  faker.internet.url(),
-  faker.internet.url(),
-  faker.internet.url(),
-];
+const linkOptions = [...new Array(7)].map(() => faker.internet.url());
 
 export const CreateLectureForm: React.FC<{
   dialogOpen: boolean;
@@ -172,7 +164,7 @@ export const CreateLectureForm: React.FC<{
             multiple
             limitTags={3}
             id="links"
-            options={linkOptions}
+            options={linkOption}
             getOptionLabel={(option) => option}
             defaultValue={[linkOptions[0]]}
             renderInput={(params) => (

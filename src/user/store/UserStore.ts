@@ -2,10 +2,6 @@ import { configure, makeAutoObservable } from "mobx";
 import { IUser, UserRole } from "./IUserStore";
 import {ILecture} from "../../lecture/store/ILectureStore";
 
-configure({
-  enforceActions: "never",
-})
-
 const lectures: ILecture[] = [];
 const user: IUser = {
   id: 0,
@@ -28,5 +24,8 @@ export class UserStore {
 
   constructor() {
     makeAutoObservable(this);
-  }
-}
+    configure({
+      enforceActions: "never",
+    });
+  };
+};

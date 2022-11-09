@@ -20,18 +20,10 @@ import { UpdateLectureRequestDTO } from "../services/dto/request/UpdateLectureRe
 import { useStores } from "../../StoreContext";
 import { ILecture } from "../store/ILectureStore";
 import { faker } from "@faker-js/faker";
-import { toJS } from "mobx";
 import { observer } from "mobx-react-lite";
+import { toJS } from "mobx";
 
-let linkOptions = [
-    faker.internet.url(),
-    faker.internet.url(),
-    faker.internet.url(),
-    faker.internet.url(),
-    faker.internet.url(),
-    faker.internet.url(),
-    faker.internet.url(),
-  ];
+const linkOptions = [...new Array(7)].map(() => faker.internet.url());
 
 export const EditLectureForm: React.FC<{
   editDialogOpen: boolean;
@@ -52,7 +44,8 @@ export const EditLectureForm: React.FC<{
   const [content, setContent] = useState(lecture.content);
   const [theme, setTheme] = useState(lecture.data.theme);
   const [image, setImage] = useState(lecture.data.image);
-  const [linkOption, setLinkOption] = useState<string[]>(linkOptions.concat(lecture.data.links));
+  let previousLinks = lecture.data.links.toString().split(", ")
+  const [linkOption, setLinkOption] = useState<string[]>(linkOptions.concat(previousLinks));
   const [errorMessage, setErrorMessage] = useState<string>("");
 
   useEffect(() => {
@@ -252,7 +245,7 @@ export const EditLectureForm: React.FC<{
                 id="links"
                 options={linkOption}
                 getOptionLabel={(option) => option}
-                defaultValue={lecture.data.links ? [lecture.data.links[0]] : [linkOption[0]] }
+                defaultValue={lecture.data.links ? [...previousLinks] : [linkOption[0]]}
                 renderInput={(params) => (
                   <TextField
                     sx={{ width: 400, height: 50 }}

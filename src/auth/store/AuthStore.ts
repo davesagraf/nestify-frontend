@@ -1,10 +1,6 @@
 import { configure, makeAutoObservable } from "mobx";
 import { IUser, UserRole } from "../../user/store/IUserStore";
 
-configure({
-  enforceActions: "never",
-})
-
 const currentUser: IUser = {
   id: 0,
   email: '',
@@ -24,5 +20,8 @@ export class AuthStore {
 
   constructor() {
     makeAutoObservable(this);
-  }
-}
+    configure({
+      enforceActions: "never",
+    });
+  };
+};
