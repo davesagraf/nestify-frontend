@@ -1,33 +1,60 @@
 import { useNavigate } from "react-router-dom";
 import { observer } from "mobx-react-lite";
-import { Box, Button, Typography } from "@mui/material";
+import { Button, Grid, Typography } from "@mui/material";
+import { toJS } from "mobx";
 
 export const AuthStatus = observer(({ authDomain }: any) => {
   let navigate = useNavigate();
-  let user = "user";
+  const user = toJS(authDomain.authStore.currentUser);
   return (
     <>
       {!authDomain.authStore.authenticated ? (
-        <Box component={"div"} sx={{ width: 400, height: 300 }}>
+        <Grid
+          container
+          sx={{
+            width: 1512,
+            height: 150,
+            display: "flex",
+            top: 0,
+            flexDirection: "column",
+            justifyContent: "center",
+            justifySelf: "center",
+          }}>
           <Typography
             sx={{
-              width: 400,
+              width: 1512,
               height: 30,
             }}>
             You are not logged in.
           </Typography>
-        </Box>
+        </Grid>
       ) : (
         <>
-          <Box component={"div"} sx={{ width: 400, height: 300 }}>
+          <Grid
+            container
+            sx={{
+              width: 1512,
+              height: 150,
+              display: "flex",
+              flexDirection: "column",
+              justifyContent: "center",
+              justifySelf: "center",
+            }}>
             <Typography
               sx={{
-                width: 400,
+                width: 1512,
                 height: 30,
+                textAlign: "center",
               }}>
-              Welcome back, {user}!{" "}
+              Welcome back, {user.firstName} {user.lastName}!{" "}
             </Typography>
             <Button
+              sx={{
+                width: 100,
+                height: 50,
+                transform: "translate(975px, -35px)",
+                zIndex: "1301"
+              }}
               variant="outlined"
               onClick={() => {
                 authDomain.logOut();
@@ -35,7 +62,7 @@ export const AuthStatus = observer(({ authDomain }: any) => {
               }}>
               Sign Out
             </Button>
-          </Box>
+          </Grid>
         </>
       )}
     </>

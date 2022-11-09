@@ -1,17 +1,24 @@
-import { IUserStore } from "../../user/store/IUserStore";
+import { IUser, IUserStore } from "../../user/store/IUserStore";
 
 export interface ILectureData {
   image: string;
   theme: string;
-  links: string[];
+  links: string[] | string;
 }
 
-export interface ILectureStore {
+export interface ILecture {
   id: number;
   createdAt?: string;
   updatedAt?: string;
   title: string;
   content: string;
   data: ILectureData;
-  users: IUserStore[];
+  users: IUser[];
+}
+
+export interface ILectureStore {
+  lectures: ILecture[];
+  lecture: ILecture;
+  lectureUsers: IUser[];
+  emptyLecture: ILecture;
 }

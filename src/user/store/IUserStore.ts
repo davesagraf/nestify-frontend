@@ -1,4 +1,5 @@
-import { ILectureStore } from "../../lecture/store/ILectureStore";
+import { ILecture } from "../../lecture/store/ILectureStore";
+
 
 export enum UserRole {
   ADMIN = "ADMIN",
@@ -14,9 +15,12 @@ export interface IUser {
   firstName: string;
   lastName: string;
   isActive: boolean;
-  lectures: ILectureStore[];
+  lectures: ILecture[];
 }
 
 export interface IUserStore {
   initialUser: IUser;
+  users: IUser[];
+  user: IUser;
+  userLectures: ILecture[];
 }
